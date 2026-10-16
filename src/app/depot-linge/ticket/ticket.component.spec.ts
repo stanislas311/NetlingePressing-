@@ -48,6 +48,21 @@ describe('TicketComponent', () => {
     expect(texte).toContain('Date de retrait prévue');
   });
 
+  it("affiche le statut sous forme de badge dans le ticket", async () => {
+    const depot = new DepotStoreService().creerDepot({
+      clientNom: 'Awa Diallo',
+      clientTelephone: '07 12 34 56 78',
+      articles: [{ type: 'Chemise', quantite: 2, service: 'Lavage' }],
+    });
+    await creerComposant(depot.id);
+    const badge = (fixture.nativeElement as HTMLElement).querySelector(
+      'np-status-badge .np-badge'
+    ) as HTMLElement;
+    expect(badge).not.toBeNull();
+    expect(badge.className).toContain('np-badge--gris');
+    expect(badge.textContent).toContain('Déposé');
+  });
+
   it('affiche un message en français si l identifiant est inconnu', async () => {
     await creerComposant('inconnu');
     const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';

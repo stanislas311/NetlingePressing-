@@ -5,11 +5,10 @@
 }
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-  <fieldset formGroupName="client">
-    <legend>Client</legend>
+  <np-card class="section" formGroupName="client">
+    <h3 class="titre-section">Client</h3>
 
-    <div class="champ">
-      <label for="nom">Nom du client</label>
+    <np-form-field label="Nom du client" controlId="nom" [erreur]="erreurClient('nom')">
       <input
         id="nom"
         type="text"
@@ -17,13 +16,9 @@
         autocomplete="off"
         placeholder="Nom et prénom"
       />
-      @if (erreurClient('nom'); as message) {
-        <p class="erreur" role="alert">{{ message }}</p>
-      }
-    </div>
+    </np-form-field>
 
-    <div class="champ">
-      <label for="telephone">Téléphone</label>
+    <np-form-field label="Téléphone" controlId="telephone" [erreur]="erreurClient('telephone')">
       <input
         id="telephone"
         type="tel"
@@ -31,44 +26,44 @@
         autocomplete="off"
         placeholder="Ex. 07 12 34 56 78"
       />
-      @if (erreurClient('telephone'); as message) {
-        <p class="erreur" role="alert">{{ message }}</p>
-      }
-    </div>
-  </fieldset>
+    </np-form-field>
+  </np-card>
 
-  <fieldset>
-    <legend>Date de retrait prévue</legend>
+  <np-card class="section">
+    <h3 class="titre-section">Date de retrait prévue</h3>
 
-    <div class="champ">
-      <label for="dateRetrait">Date de retrait</label>
+    <np-form-field
+      label="Date de retrait"
+      controlId="dateRetrait"
+      [erreur]="erreurDateRetrait()"
+    >
       <input id="dateRetrait" type="date" formControlName="dateRetrait" />
-      @if (erreurDateRetrait(); as message) {
-        <p class="erreur" role="alert">{{ message }}</p>
-      }
-    </div>
-  </fieldset>
+    </np-form-field>
+  </np-card>
 
-  <fieldset formArrayName="articles">
-    <legend>Articles du dépôt</legend>
+  <np-card class="section" formArrayName="articles">
+    <h3 class="titre-section">Articles du dépôt</h3>
 
     @for (article of articles.controls; track $index; let i = $index) {
       <div class="article" [formGroupName]="i">
-        <div class="champ">
-          <label [for]="'type-' + i">Type d'article</label>
+        <np-form-field
+          label="Type d'article"
+          [controlId]="'type-' + i"
+          [erreur]="erreurArticle(i, 'type')"
+        >
           <input
             [id]="'type-' + i"
             type="text"
             formControlName="type"
             placeholder="Ex. Chemise"
           />
-          @if (erreurArticle(i, 'type'); as message) {
-            <p class="erreur" role="alert">{{ message }}</p>
-          }
-        </div>
+        </np-form-field>
 
-        <div class="champ">
-          <label [for]="'quantite-' + i">Quantité</label>
+        <np-form-field
+          label="Quantité"
+          [controlId]="'quantite-' + i"
+          [erreur]="erreurArticle(i, 'quantite')"
+        >
           <input
             [id]="'quantite-' + i"
             type="number"
@@ -76,32 +71,28 @@
             min="1"
             step="1"
           />
-          @if (erreurArticle(i, 'quantite'); as message) {
-            <p class="erreur" role="alert">{{ message }}</p>
-          }
-        </div>
+        </np-form-field>
 
-        <div class="champ">
-          <label [for]="'service-' + i">Service demandé</label>
+        <np-form-field
+          label="Service demandé"
+          [controlId]="'service-' + i"
+          [erreur]="erreurArticle(i, 'service')"
+        >
           <input
             [id]="'service-' + i"
             type="text"
             formControlName="service"
             placeholder="Ex. Lavage, Repassage"
           />
-          @if (erreurArticle(i, 'service'); as message) {
-            <p class="erreur" role="alert">{{ message }}</p>
-          }
-        </div>
+        </np-form-field>
 
-        <button
-          type="button"
-          class="retirer"
+        <np-button
+          variant="danger"
           (click)="supprimerArticle(i)"
           [disabled]="articles.length === 1"
         >
           Retirer l'article
-        </button>
+        </np-button>
       </div>
     }
 
@@ -109,13 +100,13 @@
       <p class="erreur" role="alert">Ajoutez au moins un article complet pour le dépôt.</p>
     }
 
-    <button type="button" class="ajouter" (click)="ajouterArticle()">
+    <np-button variant="secondaire" (click)="ajouterArticle()">
       Ajouter un article
-    </button>
-  </fieldset>
+    </np-button>
+  </np-card>
 
   <div class="actions">
-    <button type="submit" class="principal">Enregistrer le dépôt</button>
+    <np-button type="submit" variant="principal">Enregistrer le dépôt</np-button>
     <a routerLink="/depots" class="annuler">Annuler</a>
   </div>
 </form>

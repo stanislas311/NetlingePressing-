@@ -1,7 +1,190 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   Netlinge Pressing — Système de design : jetons globaux
+   ========================================================================== */
+
+:root {
+  /* Couleurs du thème */
+  --np-couleur-principale: #0e5a6b;
+  --np-couleur-principale-fonce: #0a4451;
+  --np-couleur-principale-clair: #e3eef1;
+  --np-fond-page: #f5f8fa;
+  --np-surface: #ffffff;
+  --np-texte: #14232b;
+  --np-texte-doux: #4a5c66;
+  --np-accent: #f2a541;
+  --np-accent-fonce: #b9761d;
+  --np-bordure: #d5dee3;
+  --np-erreur: #b3261e;
+  --np-erreur-fond: #f9e3e1;
+  --np-succes: #1b5e20;
+  --np-succes-fond: #e3f2e5;
+
+  /* Couleurs de statut (fond / texte) */
+  --np-statut-depose-fond: #e4e8eb;
+  --np-statut-depose-texte: #3c4a52;
+  --np-statut-en-lavage-fond: #dceaf7;
+  --np-statut-en-lavage-texte: #1a4f8a;
+  --np-statut-pret-fond: #dcf0e2;
+  --np-statut-pret-texte: #1b5e20;
+  --np-statut-livre-fond: #14232b;
+  --np-statut-livre-texte: #ffffff;
+  --np-statut-retard-fond: #fbe2e0;
+  --np-statut-retard-texte: #9b1c14;
+  --np-statut-neutre-fond: #eceff1;
+  --np-statut-neutre-texte: #455a64;
+
+  /* Polices (avec secours système) */
+  --np-police-titres: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --np-police-texte: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Formes et élévations */
+  --np-rayon: 8px;
+  --np-rayon-petit: 6px;
+  --np-ombre-carte: 0 1px 3px rgba(20, 35, 43, 0.08), 0 1px 2px rgba(20, 35, 43, 0.06);
+
+  /* Espacements */
+  --np-espace-xs: 0.25rem;
+  --np-espace-sm: 0.5rem;
+  --np-espace-md: 1rem;
+  --np-espace-lg: 1.5rem;
+  --np-espace-xl: 2rem;
+}
+
+/* Référence consommée par un composant existant via var(--…) */
+.app-nav,
+.np-coquille {
+  font-family: var(--np-police-texte);
+}
+
+/* ==========================================================================
+   Typographie et éléments de base
+   ========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--np-police-texte);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--np-texte);
+  background: var(--np-fond-page);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--np-police-titres);
+  line-height: 1.25;
+  color: var(--np-texte);
+}
+
+a {
+  color: var(--np-couleur-principale);
+}
+
+:focus-visible {
+  outline: 2px solid var(--np-couleur-principale);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Boutons (classes partagées np-bouton, réutilisées par NpButtonComponent
+   et par les liens-boutons)
+   ========================================================================== */
+
+.np-bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: var(--np-rayon-petit);
+  font-family: var(--np-police-texte);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.np-bouton--principal {
+  background: var(--np-couleur-principale);
+  border-color: var(--np-couleur-principale);
+  color: #ffffff;
+}
+
+.np-bouton--principal:hover:not(:disabled),
+.np-bouton--principal:focus-visible {
+  background: var(--np-couleur-principale-fonce);
+  border-color: var(--np-couleur-principale-fonce);
+}
+
+.np-bouton--secondaire {
+  background: var(--np-surface);
+  border-color: var(--np-bordure);
+  color: var(--np-texte);
+}
+
+.np-bouton--secondaire:hover:not(:disabled),
+.np-bouton--secondaire:focus-visible {
+  background: var(--np-couleur-principale-clair);
+  border-color: var(--np-couleur-principale);
+}
+
+.np-bouton--danger {
+  background: var(--np-surface);
+  border-color: var(--np-erreur);
+  color: var(--np-erreur);
+}
+
+.np-bouton--danger:hover:not(:disabled),
+.np-bouton--danger:focus-visible {
+  background: var(--np-erreur-fond);
+}
+
+.np-bouton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Impression : seules les informations de contenu sont imprimées,
+   sans le chrome de l'application
+   ========================================================================== */
 
 @media print {
-  .app-nav {
+  @page {
+    margin: 1.5cm;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  .np-entete-application,
+  .np-nav,
+  .np-nav--ouverte,
+  .np-menu-bascule {
     display: none !important;
+  }
+
+  .np-contenu {
+    padding: 0 !important;
+  }
+
+  np-card.ticket {
+    border: none !important;
+    box-shadow: none !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 }

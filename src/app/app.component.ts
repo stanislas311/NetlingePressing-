@@ -12,12 +12,22 @@ export class AppComponent {
   readonly router = inject(Router);
   title = 'Netlinge Pressing';
   estAccueil = true;
+  menuOuvert = false;
 
   constructor() {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => {
         this.estAccueil = this.router.url === '/';
+        this.menuOuvert = false;
       });
+  }
+
+  basculerMenu(): void {
+    this.menuOuvert = !this.menuOuvert;
+  }
+
+  fermerMenu(): void {
+    this.menuOuvert = false;
   }
 }

@@ -1,0 +1,588 @@
+Node.js version v23.6.1 detected.
+Odd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.
+[1m[33mComponent HMR has been enabled, see https://angular.dev/hmr for more info.[39m[22m
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m         [2m | [22m [36m89.77 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m [36m13.60 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m            [2m | [22m  [36m3.72 kB[39m[2m | [22m
+[32mchunk-VUJOFXKG.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m938 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m     [2m | [22m[1m108.03 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-ESEQUZ2L.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m [36m69.69 kB[39m[2m | [22m
+
+Application bundle generation complete. [3.716 seconds]
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4204[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-JPMZ7SZ7.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m80.88 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.789 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:45:
+[37m      43 │ ...rmsModule, RouterLink, [32mNpButtonComponent[37m, NpCardComponent, NpFo...
+         ╵                           [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpCardComponent is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:64:
+[37m      43 │ ...erLink, NpButtonComponent, [32mNpCardComponent[37m, NpFormFieldComponent],
+         ╵                               [32m~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:81:
+[37m      43 │ ...erLink, NpButtonComponent, NpCardComponent, [32mNpFormFieldComponent[37m],
+         ╵                                                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-M2W2BBGS.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m77.46 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.433 seconds]
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-WRDTMQGO.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m76.78 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.549 seconds]
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-DJSODWAR.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m85.57 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.551 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:23:4:
+[37m      23 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:24:4:
+[37m      24 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:25:4:
+[37m      25 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:26:4:
+[37m      26 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-EN7JB4TQ.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m85.96 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.365 seconds]
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-PP7GUDWF.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m84.94 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.436 seconds]
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-TH5IQ6RZ.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m85.42 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.400 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:31:4:
+[37m      31 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpCardComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:32:4:
+[37m      32 │     [32mNpCardComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:33:4:
+[37m      33 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:34:4:
+[37m      34 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:35:4:
+[37m      35 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-WXKJ2HMR.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m85.52 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.481 seconds]
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m[36m13.60 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m[1mRaw size[22m
+[32mchunk-KUEPZMQV.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m[36m84.14 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.731 seconds]
+
+Component update sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.855 seconds]
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG9: Property 'controlId' does not exist on type 'NpFormFieldComponent'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/systeme-design/np-form-field/np-form-field.component.ts:8:20:
+[37m      8 │       <label [for]="[32mcontrolId[37m" class="np-champ__libelle">{{ label }...
+        ╵                     [32m~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m         [2m | [22m [36m89.77 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m [36m13.60 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m            [2m | [22m  [36m3.72 kB[39m[2m | [22m
+[32mchunk-VUJOFXKG.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m938 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m     [2m | [22m[1m108.03 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-N5T7OV7F.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m [36m84.19 kB[39m[2m | [22m
+
+Application bundle generation complete. [0.795 seconds]
+
+Page reload sent to client(s).
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.610 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:33:
+[37m      43 │ ...rts: [ReactiveFormsModule, [32mRouterLink[37m, NpButtonComponent, NpCar...
+         ╵                               [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:45:
+[37m      43 │ ...rmsModule, RouterLink, [32mNpButtonComponent[37m, NpCardComponent, NpFo...
+         ╵                           [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpCardComponent is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:64:
+[37m      43 │ ...erLink, NpButtonComponent, [32mNpCardComponent[37m, NpFormFieldComponent],
+         ╵                               [32m~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of DepotCreateComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:43:81:
+[37m      43 │ ...erLink, NpButtonComponent, NpCardComponent, [32mNpFormFieldComponent[37m],
+         ╵                                                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:22:4:
+[37m      22 │     [32mRouterLink[37m,
+         ╵     [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:23:4:
+[37m      23 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:24:4:
+[37m      24 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:25:4:
+[37m      25 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:26:4:
+[37m      26 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:29:4:
+[37m      29 │     [32mRouterLink[37m,
+         ╵     [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:31:4:
+[37m      31 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpCardComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:32:4:
+[37m      32 │     [32mNpCardComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:33:4:
+[37m      33 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:34:4:
+[37m      34 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:35:4:
+[37m      35 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.html:19:4:
+[37m      19 │     [32m</np-form-field>[37m
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component DepotCreateComponent.
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:44:15:
+[37m      44 │   templateUrl: [32m'./depot-create.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.html:29:4:
+[37m      29 │     [32m</np-form-field>[37m
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component DepotCreateComponent.
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:44:15:
+[37m      44 │   templateUrl: [32m'./depot-create.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-create/depot-create.component.html:37:4:
+[37m      37 │     [32m</np-form-field>[37m
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component DepotCreateComponent.
+
+    src/app/depot-linge/depot-create/depot-create.component.ts:44:15:
+[37m      44 │   templateUrl: [32m'./depot-create.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.html:16:0:
+[37m      16 │ [32m</np-form-field>[37m
+         ╵ [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component DepotListComponent.
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:28:15:
+[37m      28 │   templateUrl: [32m'./depot-list.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.html:61:8:
+[37m      61 │         [32m</np-form-field>[37m
+         ╵         [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component TicketComponent.
+
+    src/app/depot-linge/ticket/ticket.component.ts:37:15:
+[37m      37 │   templateUrl: [32m'./ticket.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.710 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:22:4:
+[37m      22 │     [32mRouterLink[37m,
+         ╵     [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:23:4:
+[37m      23 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:24:4:
+[37m      24 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:25:4:
+[37m      25 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of DepotListComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:26:4:
+[37m      26 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:29:4:
+[37m      29 │     [32mRouterLink[37m,
+         ╵     [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:31:4:
+[37m      31 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpCardComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:32:4:
+[37m      32 │     [32mNpCardComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:33:4:
+[37m      33 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:34:4:
+[37m      34 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:35:4:
+[37m      35 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/depot-list/depot-list.component.html:16:0:
+[37m      16 │ [32m</np-form-field>[37m
+         ╵ [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component DepotListComponent.
+
+    src/app/depot-linge/depot-list/depot-list.component.ts:28:15:
+[37m      28 │   templateUrl: [32m'./depot-list.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.html:61:8:
+[37m      61 │         [32m</np-form-field>[37m
+         ╵         [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component TicketComponent.
+
+    src/app/depot-linge/ticket/ticket.component.ts:37:15:
+[37m      37 │   templateUrl: [32m'./ticket.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.766 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: RouterLink is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:29:4:
+[37m      29 │     [32mRouterLink[37m,
+         ╵     [32m~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpButtonComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:31:4:
+[37m      31 │     [32mNpButtonComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpCardComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:32:4:
+[37m      32 │     [32mNpCardComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpFormFieldComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:33:4:
+[37m      33 │     [32mNpFormFieldComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpStatusBadgeComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:34:4:
+[37m      34 │     [32mNpStatusBadgeComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mTS-998113: NpTableComponent is not used within the template of TicketComponent[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.ts:35:4:
+[37m      35 │     [32mNpTableComponent[37m,
+         ╵     [32m~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Unexpected closing tag "np-form-field". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/depot-linge/ticket/ticket.component.html:61:8:
+[37m      61 │         [32m</np-form-field>[37m
+         ╵         [32m~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component TicketComponent.
+
+    src/app/depot-linge/ticket/ticket.component.ts:37:15:
+[37m      37 │   templateUrl: [32m'./ticket.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m         [2m | [22m [36m89.77 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m              [2m | [22m [36m13.60 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m            [2m | [22m  [36m3.72 kB[39m[2m | [22m
+[32mchunk-VUJOFXKG.js[39m  [2m | [22m[2m-[22m                 [2m | [22m[36m938 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m     [2m | [22m[1m108.03 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m             [2m | [22m [1mRaw size[22m
+[32mchunk-X2G2JTK6.js[39m  [2m | [22m[2mdepot-linge-routes[22m[2m | [22m [36m84.34 kB[39m[2m | [22m
+
+Application bundle generation complete. [1.055 seconds]
+
+Page reload sent to client(s).

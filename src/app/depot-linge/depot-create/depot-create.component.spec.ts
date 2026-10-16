@@ -44,6 +44,23 @@ describe('DepotCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it("utilise les composants du design system (champs, cartes, boutons)", () => {
+    const noeud = fixture.nativeElement as HTMLElement;
+    expect(noeud.querySelectorAll('np-form-field').length).toBeGreaterThanOrEqual(4);
+    expect(noeud.querySelectorAll('np-card').length).toBe(3);
+    expect(noeud.querySelector('button[type="submit"]')?.textContent).toContain(
+      'Enregistrer le dépôt'
+    );
+  });
+
+  it("associe le libellé Nom du client au champ id nom", () => {
+    const noeud = fixture.nativeElement as HTMLElement;
+    const label = noeud.querySelector('label[for="nom"]') as HTMLLabelElement;
+    const input = noeud.querySelector('#nom') as HTMLInputElement;
+    expect(label).not.toBeNull();
+    expect(input).not.toBeNull();
+  });
+
   it('commence avec un seul article dans le formulaire', () => {
     expect(component.articles.length).toBe(1);
   });

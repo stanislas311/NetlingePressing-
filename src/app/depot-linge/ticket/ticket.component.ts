@@ -1,6 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { NpButtonComponent } from '../../systeme-design/np-button/np-button.component';
+import { NpCardComponent } from '../../systeme-design/np-card/np-card.component';
+import { NpFormFieldComponent } from '../../systeme-design/np-form-field/np-form-field.component';
+import { NpStatusBadgeComponent } from '../../systeme-design/np-status-badge/np-status-badge.component';
+import { NpTableComponent } from '../../systeme-design/np-table/np-table.component';
 import {
   dateRetraitEnIso,
   Depot,
@@ -20,7 +25,15 @@ const formateurDate = new Intl.DateTimeFormat('fr-FR', {
 
 @Component({
   selector: 'app-ticket',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    NpButtonComponent,
+    NpCardComponent,
+    NpFormFieldComponent,
+    NpStatusBadgeComponent,
+    NpTableComponent,
+  ],
   templateUrl: './ticket.component.html',
   styleUrl: './ticket.component.css',
 })

@@ -2,6 +2,10 @@ import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { startWith } from 'rxjs';
+import { NpButtonComponent } from '../../systeme-design/np-button/np-button.component';
+import { NpFormFieldComponent } from '../../systeme-design/np-form-field/np-form-field.component';
+import { NpStatusBadgeComponent } from '../../systeme-design/np-status-badge/np-status-badge.component';
+import { NpTableComponent } from '../../systeme-design/np-table/np-table.component';
 import {
   dateRetraitEnIso,
   Depot,
@@ -13,7 +17,14 @@ import { DepotStoreService } from '../services/depot-store.service';
 
 @Component({
   selector: 'app-depot-list',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NpButtonComponent,
+    NpFormFieldComponent,
+    NpStatusBadgeComponent,
+    NpTableComponent,
+  ],
   templateUrl: './depot-list.component.html',
   styleUrl: './depot-list.component.css',
 })

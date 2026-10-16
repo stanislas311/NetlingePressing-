@@ -1,5 +1,5 @@
 @if (depot; as d) {
-  <article class="ticket">
+  <np-card class="ticket">
     <header class="entete">
       <h2>Ticket de dépôt</h2>
       <p class="numero">{{ d.ticketNumero }}</p>
@@ -16,7 +16,9 @@
       </div>
       <div>
         <dt>Statut</dt>
-        <dd>{{ libelleStatut(d.statut) }}</dd>
+        <dd>
+          <np-status-badge [statut]="d.statut" [libelle]="libelleStatut(d.statut)" />
+        </dd>
       </div>
       <div>
         <dt>Client</dt>
@@ -25,56 +27,57 @@
     </dl>
 
     <h3>Articles déposés</h3>
-    <table class="articles">
-      <thead>
-        <tr>
-          <th scope="col">Type d'article</th>
-          <th scope="col">Quantité</th>
-          <th scope="col">Service demandé</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (article of d.articles; track $index) {
+    <np-table libelle="Articles du dépôt">
+      <table class="articles">
+        <thead>
           <tr>
-            <td>{{ article.type }}</td>
-            <td>{{ article.quantite }}</td>
-            <td>{{ article.service }}</td>
+            <th scope="col">Type d'article</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Service demandé</th>
           </tr>
-        }
-      </tbody>
-    </table>
-  </article>
+        </thead>
+        <tbody>
+          @for (article of d.articles; track $index) {
+            <tr>
+              <td>{{ article.type }}</td>
+              <td>{{ article.quantite }}</td>
+              <td>{{ article.service }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </np-table>
+  </np-card>
 
   <div class="modification">
     @if (editionOuverte) {
       <div class="edition">
-        <div class="champ">
-          <label for="date-retrait-ticket">Nouvelle date de retrait</label>
+        <np-form-field label="Nouvelle date de retrait" controlId="date-retrait-ticket">
           <input
             id="date-retrait-ticket"
             type="date"
             [formControl]="dateEdition"
           />
-        </div>
-        <button type="button" class="enregistrer" (click)="enregistrerDateRetrait()">
+        </np-form-field>
+        <np-button variant="principal" (click)="enregistrerDateRetrait()">
           Enregistrer
-        </button>
-        <button type="button" class="annuler" (click)="annulerEdition()">
+        </np-button>
+        <np-button variant="secondaire" (click)="annulerEdition()">
           Annuler
-        </button>
+        </np-button>
       </div>
       @if (erreurEdition; as message) {
         <p class="erreur" role="alert">{{ message }}</p>
       }
     } @else {
-      <button type="button" class="modifier" (click)="ouvrirEdition()">
+      <np-button variant="secondaire" (click)="ouvrirEdition()">
         Modifier la date de retrait
-      </button>
+      </np-button>
     }
   </div>
 
   <div class="actions">
-    <button type="button" class="imprimer" (click)="imprimer()">Imprimer</button>
+    <np-button variant="principal" (click)="imprimer()">Imprimer</np-button>
     <a routerLink="/depots">Retour à la liste</a>
   </div>
 } @else {

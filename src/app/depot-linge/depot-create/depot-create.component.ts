@@ -9,6 +9,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { NpButtonComponent } from '../../systeme-design/np-button/np-button.component';
+import { NpCardComponent } from '../../systeme-design/np-card/np-card.component';
+import { NpFormFieldComponent } from '../../systeme-design/np-form-field/np-form-field.component';
 import { dateRetraitValide, jourLocal } from '../models/depot.model';
 import { DELAI_RETRAIT_HEURES, DepotStoreService } from '../services/depot-store.service';
 
@@ -37,7 +40,7 @@ export function dateRetraitValidator(control: AbstractControl): ValidationErrors
 
 @Component({
   selector: 'app-depot-create',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, NpButtonComponent, NpCardComponent, NpFormFieldComponent],
   templateUrl: './depot-create.component.html',
   styleUrl: './depot-create.component.css',
 })

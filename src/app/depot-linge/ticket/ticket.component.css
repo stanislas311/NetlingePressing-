@@ -1,20 +1,16 @@
 :host {
   display: block;
-  padding: 1rem;
+  padding: var(--np-espace-md, 1rem);
 }
 
 .ticket {
   max-width: 480px;
   margin: 0 auto;
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 1.5rem;
-  background: #fff;
 }
 
 .entete {
   text-align: center;
-  border-bottom: 1px dashed #888;
+  border-bottom: 1px dashed var(--np-bordure, #d5dee3);
   padding-bottom: 0.75rem;
   margin-bottom: 1rem;
 }
@@ -28,6 +24,7 @@
   font-weight: 700;
   letter-spacing: 0.05rem;
   margin: 0;
+  font-family: var(--np-police-titres, sans-serif);
 }
 
 .infos {
@@ -37,6 +34,7 @@
 .infos > div {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
   margin-bottom: 0.35rem;
 }
@@ -63,7 +61,7 @@ h3 {
 
 .articles th,
 .articles td {
-  border: 1px solid #888;
+  border: 1px solid var(--np-bordure, #d5dee3);
   padding: 0.4rem 0.5rem;
   text-align: left;
   font-size: 0.95rem;
@@ -74,21 +72,12 @@ h3 {
   margin: 1rem auto 0;
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
-
-button.imprimer {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  background: #1565c0;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
+  gap: var(--np-espace-md, 1rem);
 }
 
 .actions a {
-  color: #1565c0;
+  color: var(--np-couleur-principale, #0e5a6b);
+  font-weight: 500;
 }
 
 .modification {
@@ -103,45 +92,14 @@ button.imprimer {
   align-items: end;
 }
 
-.champ label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
-}
-
-.champ input {
-  padding: 0.4rem 0.5rem;
-  border: 1px solid #aaa;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.modifier,
-.enregistrer,
-.annuler {
-  padding: 0.5rem 1rem;
-  border: 1px solid #888;
-  border-radius: 4px;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.enregistrer {
-  background: #1565c0;
-  border-color: #1565c0;
-  color: #fff;
-}
-
 .erreur {
-  color: #b00020;
+  color: var(--np-erreur, #b3261e);
   margin: 0.5rem 0 0;
   font-size: 0.875rem;
 }
 
 .introuvable {
-  color: #b00020;
+  color: var(--np-erreur, #b3261e);
   font-weight: 600;
 }
 
@@ -153,12 +111,5 @@ button.imprimer {
   .actions,
   .modification {
     display: none;
-  }
-
-  .ticket {
-    border: none;
-    max-width: none;
-    margin: 0;
-    padding: 0;
   }
 }

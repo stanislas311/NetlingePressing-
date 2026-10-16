@@ -52,6 +52,23 @@ describe('DepotListComponent', () => {
     expect(texte()).toContain('Déposé');
   });
 
+  it("affiche le statut sous forme de badge coloré", () => {
+    const badges = (fixture.nativeElement as HTMLElement).querySelectorAll(
+      'np-status-badge .np-badge'
+    );
+    expect(badges.length).toBe(2);
+    expect((badges[0] as HTMLElement).className).toContain('np-badge--gris');
+    expect(badges[0].textContent).toContain('Déposé');
+  });
+
+  it("encapsule le tableau dans une région de défilement accessible", () => {
+    const region = (fixture.nativeElement as HTMLElement).querySelector(
+      'np-table .np-table__defilement'
+    )!;
+    expect(region.getAttribute('role')).toBe('region');
+    expect(region.getAttribute('aria-label')).toBe('Liste des dépôts de linge');
+  });
+
   it('filtre par numéro de ticket', () => {
     const premierTicket = store.listerDepots()[0].ticketNumero;
     component.recherche.setValue(premierTicket.slice(-4));
