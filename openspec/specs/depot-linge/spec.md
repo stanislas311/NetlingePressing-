@@ -94,7 +94,7 @@ Le système SHALL lister les dépôts existants et SHALL permettre de les recher
 - **THEN** seuls les dépôts correspondant à la fois au filtre et à la recherche sont affichés
 
 ### Requirement: Persistance locale des dépôt
-Le système SHALL persister les dépôts et les clients dans le localStorage du navigateur, de sorte que les données restent disponibles après un rechargement de la page. Aucune communication avec un serveur ne SHALL être effectuée.
+Le système SHALL persister les dépôts et les clients dans le localStorage du navigateur, de sorte que les données restent disponibles après un rechargement de la page. Aucune communication avec un serveur ne SHALL être effectuée. Les pages de création, de liste et de ticket des dépôts SHALL n'être accessibles qu'à une personne authentifiée.
 
 #### Scenario: Rechargement de la page
 - **WHEN** l'utilisateur recharge l'application après avoir créé des dépôts
@@ -103,6 +103,10 @@ Le système SHALL persister les dépôts et les clients dans le localStorage du 
 #### Scenario: Stockage indisponible ou corrompu
 - **WHEN** le localStorage est indisponible ou contient des données illisibles
 - **THEN** l'application démarre avec une liste de dépôts vide sans erreur bloquante
+
+#### Scenario: Accès aux dépôts sans session
+- **WHEN** un visiteur non connecté tente d'ouvrir la liste, la création ou un ticket
+- **THEN** il est redirigé vers la page de connexion
 
 ### Requirement: Modification de la date de retrait d'un dépôt existant
 Le système SHALL permettre de modifier la date de retrait prévue d'un dépôt existant, depuis la liste des dépôts et depuis la page du ticket, uniquement si le dépôt n'est pas livré. Le système SHALL valider que la nouvelle date de retrait n'est pas antérieure à la date de dépôt du dépôt. Après modification, la date de retrait affichée sur la page du ticket imprimable SHALL être à jour.
