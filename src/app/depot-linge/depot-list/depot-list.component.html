@@ -5,17 +5,28 @@
   >
 </div>
 
-<np-form-field
-  label="Rechercher par numéro de ticket ou par nom de client"
-  controlId="recherche"
->
-  <input
-    id="recherche"
-    type="search"
-    [formControl]="recherche"
-    placeholder="Ex. DP-2026 ou Awa"
-  />
-</np-form-field>
+<div class="filtres">
+  <np-form-field
+    label="Rechercher par numéro de ticket ou par nom de client"
+    controlId="recherche"
+  >
+    <input
+      id="recherche"
+      type="search"
+      [formControl]="recherche"
+      placeholder="Ex. DP-2026 ou Awa"
+    />
+  </np-form-field>
+
+  <np-form-field label="Filtrer par statut" controlId="filtre-statut">
+    <select id="filtre-statut" [formControl]="filtreStatut">
+      <option value="">Tous les statuts</option>
+      @for (statut of statutsDisponibles; track statut) {
+        <option [value]="statut">{{ labelsStatuts[statut] }}</option>
+      }
+    </select>
+  </np-form-field>
+</div>
 
 @if (depots.length === 0) {
   <p class="vide" role="status">Aucun dépôt trouvé.</p>
@@ -61,9 +72,19 @@
               } @else {
                 <span>{{ formaterDate(depot.dateRetraitPrevue) }}</span>
                 <div class="ligne-action">
-                  <np-button variant="secondaire" (click)="ouvrirEdition(depot)">
-                    Modifier la date de retrait
-                  </np-button>
+                  @if (peutAvancer(depot)) {
+                    <np-button
+                      variant="principal"
+                      (click)="passerAuStatutSuivant(depot)"
+                    >
+                      Passer à l'étape suivante
+                    </np-button>
+                  }
+                  @if (depot.statut !== 'livre') {
+                    <np-button variant="secondaire" (click)="ouvrirEdition(depot)">
+                      Modifier la date de retrait
+                    </np-button>
+                  }
                 </div>
               }
             </td>

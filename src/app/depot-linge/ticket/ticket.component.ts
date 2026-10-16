@@ -59,6 +59,18 @@ export class TicketComponent {
     return STATUT_LABELS[statut];
   }
 
+  peutAvancer(): boolean {
+    return !!this.depot && this.depot.statut !== 'livre';
+  }
+
+  passerAuStatutSuivant(): void {
+    if (!this.depot) {
+      return;
+    }
+    this.store.passerAuStatutSuivant(this.depot.id);
+    this.depot = this.store.getDepotById(this.depot.id);
+  }
+
   imprimer(): void {
     window.print();
   }

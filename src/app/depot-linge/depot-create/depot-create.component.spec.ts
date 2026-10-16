@@ -20,6 +20,7 @@ describe('DepotCreateComponent', () => {
     statut: 'depose',
     dateDepot: new Date().toISOString(),
     dateRetraitPrevue: new Date(Date.now() + 48 * 3_600_000).toISOString(),
+    historiqueStatuts: [],
   };
 
   beforeEach(async () => {

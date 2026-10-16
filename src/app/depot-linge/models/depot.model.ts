@@ -10,11 +10,22 @@ export interface DepotArticle {
   service: string;
 }
 
-export type DepotStatut = 'depose';
+export type DepotStatut = 'depose' | 'en-lavage' | 'pret' | 'livre';
+
+export const STATUTS_ORDE: DepotStatut[] = ['depose', 'en-lavage', 'pret', 'livre'];
 
 export const STATUT_LABELS: Record<DepotStatut, string> = {
   depose: 'Déposé',
+  'en-lavage': 'En lavage',
+  pret: 'Prêt',
+  livre: 'Livré',
 };
+
+export interface DepotHistoriqueStatut {
+  ancien: DepotStatut | null;
+  nouveau: DepotStatut;
+  date: string;
+}
 
 export interface Depot {
   id: string;
@@ -26,6 +37,8 @@ export interface Depot {
   statut: DepotStatut;
   dateDepot: string;
   dateRetraitPrevue: string;
+  dateRetraitReelle?: string;
+  historiqueStatuts: DepotHistoriqueStatut[];
 }
 
 export interface DepotCreation {

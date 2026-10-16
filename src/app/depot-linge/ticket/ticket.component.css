@@ -53,14 +53,17 @@ h3 {
   font-size: 1rem;
 }
 
-.articles {
+.articles,
+.historique {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
 }
 
 .articles th,
-.articles td {
+.articles td,
+.historique th,
+.historique td {
   border: 1px solid var(--np-bordure, #d5dee3);
   padding: 0.4rem 0.5rem;
   text-align: left;

@@ -5,7 +5,7 @@ import {
   CLE_DEPOTS,
   DepotStoreService,
 } from './depot-store.service';
-import { DepotCreation } from '../models/depot.model';
+import { DepotCreation, STATUTS_ORDE } from '../models/depot.model';
 
 describe('DepotStoreService', () => {
   let service: DepotStoreService;
@@ -209,5 +209,141 @@ describe('DepotStoreService', () => {
     it('retourne une liste vide si aucun dépôt ne correspond', () => {
       expect(service.rechercherDepots('zzz-inconnu')).toEqual([]);
     });
+  });
+
+  describe('passerAuStatutSuivant', () => {
+    let depot: ReturnType<DepotStoreService['creerDepot']>;
+
+    beforeEach(() => {
+      depot = service.creerDepot(creation);
+    });
+
+    it("avance d'une étape de déposé à en-lavage", () => {
+      const resultat = service.passerAuStatutSuivant(depot.id);
+      expect(resultat).not.toBeNull();
+      expect(resultat!.statut).toBe('en-lavage');
+      expect(resultat!.historiqueStatuts.length).toBe(2);
+      expect(resultat!.historiqueStatuts[1].ancien).toBe('depose');
+      expect(resultat!.historiqueStatuts[1].nouveau).toBe('en-lavage');
+    });
+
+    it('suit le circuit complet jusqu à livré', () => {
+      service.passerAuStatutSuivant(depot.id);
+      service.passerAuStatutSuivant(depot.id);
+      const livre = service.passerAuStatutSuivant(depot.id);
+      expect(livre!.statut).toBe('livre');
+      expect(livre!.dateRetraitReelle).toBeDefined();
+      expect(livre!.historiqueStatuts.length).toBe(4);
+    });
+
+    it("enregistre la date et l'heure réelles du retrait au passage à livré", () => {
+      service.passerAuStatutSuivant(depot.id);
+      service.passerAuStatutSuivant(depot.id);
+      const livre = service.passerAuStatutSuivant(depot.id);
+      expect(new Date(livre!.dateRetraitReelle!).getTime()).toBeGreaterThan(0);
+      expect(livre!.dateRetraitPrevue).not.toBe(livre!.dateRetraitReelle!);
+    });
+
+    it('refuse tout passage sur un dépôt livré', () => {
+      service.passerAuStatutSuivant(depot.id);
+      service.passerAuStatutSuivant(depot.id);
+      service.passerAuStatutSuivant(depot.id);
+      const resultat = service.passerAuStatutSuivant(depot.id);
+      expect(resultat).toBeNull();
+    });
+
+    it("retourne null pour un dépôt introuvable", () => {
+      expect(service.passerAuStatutSuivant('inconnu')).toBeNull();
+    });
+  });
+
+  describe('compatibilité des dépôts existants', () => {
+    it("normalise un dépôt existant sans historique ni statut valide", () => {
+      const ancien = {
+        id: 'ancien-1',
+        ticketNumero: 'DP-20250101-0001',
+        clientId: 'c1',
+        clientNom: 'Client ancien',
+        clientTelephone: '01 02 03 04 05',
+        articles: [{ type: 'Chemise', quantite: 1, service: 'Lavage' }],
+        statut: 'inconnu',
+        dateDepot: '2025-01-01T10:00:00.000Z',
+        dateRetraitPrevue: '2025-01-03T10:00:00.000Z',
+      };
+      localStorage.setItem(CLE_DEPOTS, JSON.stringify([ancien]));
+
+      const depots = service.listerDepots();
+      expect(depots.length).toBe(1);
+      expect(depots[0].statut).toBe('depose');
+      expect(depots[0].historiqueStatuts.length).toBe(1);
+      expect(depots[0].historiqueStatuts[0].nouveau).toBe('depose');
+    });
+
+    it("préserve les dépôts existants sans erreur bloquante", () => {
+      const ancien = {
+        id: 'ancien-2',
+        ticketNumero: 'DP-20250102-0001',
+        clientId: 'c2',
+        clientNom: 'Client 2',
+        clientTelephone: '01 02 03 04 06',
+        articles: [],
+        statut: 'depose',
+        dateDepot: '2025-01-02T10:00:00.000Z',
+        dateRetraitPrevue: '2025-01-04T10:00:00.000Z',
+      };
+      localStorage.setItem(CLE_DEPOTS, JSON.stringify([ancien]));
+      expect(service.listerDepots()[0].clientNom).toBe('Client 2');
+    });
+  });
+
+  describe('rechercherDepots avec filtre de statut', () => {
+    beforeEach(() => {
+      service.creerDepot(creation);
+      const second = service.creerDepot(creation);
+      service.passerAuStatutSuivant(second.id);
+    });
+
+    it('filtre par statut', () => {
+      const resultat = service.rechercherDepots('', 'depose');
+      expect(resultat.length).toBe(1);
+      expect(resultat[0].statut).toBe('depose');
+    });
+
+    it("combine filtre de statut et recherche", () => {
+      const depotEnLavage = service
+        .listerDepots()
+        .find((d) => d.statut === 'en-lavage')!;
+      const resultat = service.rechercherDepots(
+        depotEnLavage.ticketNumero.slice(-4),
+        'en-lavage'
+      );
+      expect(resultat.length).toBe(1);
+      expect(resultat[0].id).toBe(depotEnLavage.id);
+    });
+
+    it('retourne tous les dépôts si le filtre est vide', () => {
+      expect(service.rechercherDepots('', undefined).length).toBe(2);
+    });
+  });
+
+  describe('verrouillage après livraison', () => {
+    it('refuse la modification de date sur un dépôt livré', () => {
+      const depot = service.creerDepot(creation);
+      service.passerAuStatutSuivant(depot.id);
+      service.passerAuStatutSuivant(depot.id);
+      service.passerAuStatutSuivant(depot.id);
+
+      const nouvelleDate = new Date(Date.now() + 96 * 3_600_000).toISOString();
+      const resultat = service.modifierDateRetrait(depot.id, nouvelleDate);
+
+      expect(resultat).toBeNull();
+      expect(service.getDepotById(depot.id)!.dateRetraitPrevue).toBe(
+        depot.dateRetraitPrevue
+      );
+    });
+  });
+
+  it("l'ordre des statuts suit le circuit imposé", () => {
+    expect(STATUTS_ORDE).toEqual(['depose', 'en-lavage', 'pret', 'livre']);
   });
 });

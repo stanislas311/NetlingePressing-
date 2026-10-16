@@ -117,7 +117,7 @@ describe('DepotListComponent', () => {
       ).filter((b) => (b.textContent ?? '').includes(texteRecherche));
     }
 
-    it('propose une action Modifier la date de retrait sur chaque ligne', () => {
+    it('propose une action Modifier la date de retrait sur chaque ligne non livrée', () => {
       expect(boutons('Modifier la date de retrait').length).toBe(2);
     });
 
@@ -185,6 +185,69 @@ describe('DepotListComponent', () => {
       fixture.detectChanges();
       expect(component.depotEnEdition).toBeNull();
       expect(store.getDepotById(depot.id)!.dateRetraitPrevue).toBe(avant);
+    });
+  });
+
+  describe('filtre par statut', () => {
+    it('propose un sélecteur de filtre par statut', () => {
+      const select = (fixture.nativeElement as HTMLElement).querySelector(
+        '#filtre-statut'
+      ) as HTMLSelectElement;
+      expect(select).not.toBeNull();
+      expect(select.options.length).toBe(5);
+    });
+
+    it('filtre les dépôts par statut sélectionné', () => {
+      const premier = store.listerDepots()[0];
+      store.passerAuStatutSuivant(premier.id);
+      component.filtreStatut.setValue('en-lavage');
+      fixture.detectChanges();
+      expect(component.depots.length).toBe(1);
+      expect(component.depots[0].statut).toBe('en-lavage');
+    });
+
+    it('combine le filtre de statut et la recherche', () => {
+      const premier = store.listerDepots()[0];
+      store.passerAuStatutSuivant(premier.id);
+      component.filtreStatut.setValue('en-lavage');
+      component.recherche.setValue('awa');
+      fixture.detectChanges();
+      expect(component.depots.length).toBe(1);
+      expect(component.depots[0].clientNom).toBe('Awa Diallo');
+    });
+  });
+
+  describe("bouton Passer à l'étape suivante", () => {
+    function boutonsAvancement(): HTMLButtonElement[] {
+      return Array.from(
+        (fixture.nativeElement as HTMLElement).querySelectorAll('button')
+      ).filter((b) => (b.textContent ?? '').includes("Passer à l'étape suivante"));
+    }
+
+    it('propose le bouton sur chaque ligne non livrée', () => {
+      expect(boutonsAvancement().length).toBe(2);
+    });
+
+    it("avance le statut d'un dépôt au clic", () => {
+      const depot = store.listerDepots()[0];
+      component.passerAuStatutSuivant(depot);
+      fixture.detectChanges();
+      expect(store.getDepotById(depot.id)!.statut).toBe('en-lavage');
+      expect(component.depots.find((d) => d.id === depot.id)!.statut).toBe('en-lavage');
+    });
+
+    it('masque le bouton et la modification de date sur un dépôt livré', () => {
+      const depot = store.listerDepots()[0];
+      store.passerAuStatutSuivant(depot.id);
+      store.passerAuStatutSuivant(depot.id);
+      store.passerAuStatutSuivant(depot.id);
+      component.recherche.setValue(depot.ticketNumero);
+      fixture.detectChanges();
+      expect(boutonsAvancement().length).toBe(0);
+      const boutonsModif = Array.from(
+        (fixture.nativeElement as HTMLElement).querySelectorAll('button')
+      ).filter((b) => (b.textContent ?? '').includes('Modifier la date de retrait'));
+      expect(boutonsModif.length).toBe(0);
     });
   });
 });

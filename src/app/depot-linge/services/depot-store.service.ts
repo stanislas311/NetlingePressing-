@@ -5,6 +5,8 @@ import {
   dateRetraitValide,
   Depot,
   DepotCreation,
+  DepotStatut,
+  STATUTS_ORDE,
 } from '../models/depot.model';
 
 export const CLE_DEPOTS = 'netlinge.deposits';
@@ -41,6 +43,7 @@ export class DepotStoreService {
       statut: 'depose',
       dateDepot: dateDepotIso,
       dateRetraitPrevue,
+      historiqueStatuts: [{ ancien: null, nouveau: 'depose', date: dateDepotIso }],
     };
 
     const depots = this.listerDepots();
@@ -56,15 +59,18 @@ export class DepotStoreService {
     }
     try {
       const depots = JSON.parse(brut);
-      return Array.isArray(depots) ? (depots as Depot[]) : [];
+      return Array.isArray(depots) ? (depots as Depot[]).map((d) => this.normaliserDepot(d)) : [];
     } catch {
       return [];
     }
   }
 
-  rechercherDepots(requete: string): Depot[] {
+  rechercherDepots(requete: string, statutFiltre?: DepotStatut): Depot[] {
     const filtre = requete.trim().toLowerCase();
-    const depots = this.listerDepots();
+    let depots = this.listerDepots();
+    if (statutFiltre) {
+      depots = depots.filter((d) => d.statut === statutFiltre);
+    }
     if (!filtre) {
       return depots;
     }
@@ -79,6 +85,35 @@ export class DepotStoreService {
     return this.listerDepots().find((d) => d.id === id);
   }
 
+  passerAuStatutSuivant(depotId: string): Depot | null {
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return null;
+    }
+    const depot = depots[index];
+    const indexCourant = STATUTS_ORDE.indexOf(depot.statut);
+    if (indexCourant === -1 || indexCourant >= STATUTS_ORDE.length - 1) {
+      return null;
+    }
+    const nouveauStatut = STATUTS_ORDE[indexCourant + 1];
+    const maintenant = new Date().toISOString();
+    const misAJour: Depot = {
+      ...depot,
+      statut: nouveauStatut,
+      historiqueStatuts: [
+        ...depot.historiqueStatuts,
+        { ancien: depot.statut, nouveau: nouveauStatut, date: maintenant },
+      ],
+    };
+    if (nouveauStatut === 'livre') {
+      misAJour.dateRetraitReelle = maintenant;
+    }
+    depots[index] = misAJour;
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    return misAJour;
+  }
+
   modifierDateRetrait(depotId: string, nouvelleDateIso: string): Depot | null {
     const depots = this.listerDepots();
     const index = depots.findIndex((d) => d.id === depotId);
@@ -86,6 +121,9 @@ export class DepotStoreService {
       return null;
     }
     const depot = depots[index];
+    if (depot.statut === 'livre') {
+      return null;
+    }
     if (!dateRetraitValide(nouvelleDateIso, depot.dateDepot)) {
       return null;
     }
@@ -93,6 +131,17 @@ export class DepotStoreService {
     depots[index] = misAJour;
     this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
     return misAJour;
+  }
+
+  private normaliserDepot(depot: Depot): Depot {
+    const statutValide: DepotStatut[] = STATUTS_ORDE;
+    const statut =
+      depot.statut && statutValide.includes(depot.statut) ? depot.statut : 'depose';
+    const historique =
+      Array.isArray(depot.historiqueStatuts) && depot.historiqueStatuts.length > 0
+        ? depot.historiqueStatuts
+        : [{ ancien: null, nouveau: statut, date: depot.dateDepot }];
+    return { ...depot, statut, historiqueStatuts: historique };
   }
 
   private enregistrerClient(nom: string, telephone: string): Client {

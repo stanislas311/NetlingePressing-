@@ -20,6 +20,12 @@
           <np-status-badge [statut]="d.statut" [libelle]="libelleStatut(d.statut)" />
         </dd>
       </div>
+      @if (d.dateRetraitReelle; as retraitReel) {
+        <div>
+          <dt>Retiré le</dt>
+          <dd>{{ formaterDate(retraitReel) }}</dd>
+        </div>
+      }
       <div>
         <dt>Client</dt>
         <dd>{{ d.clientNom }} ({{ d.clientTelephone }})</dd>
@@ -47,9 +53,47 @@
         </tbody>
       </table>
     </np-table>
+
+    <h3>Historique des statuts</h3>
+    <np-table libelle="Historique des statuts du dépôt">
+      <table class="historique">
+        <thead>
+          <tr>
+            <th scope="col">Date et heure</th>
+            <th scope="col">Ancien statut</th>
+            <th scope="col">Nouveau statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entree of d.historiqueStatuts; track $index) {
+            <tr>
+              <td>{{ formaterDate(entree.date) }}</td>
+              <td>
+                @if (entree.ancien; as ancien) {
+                  {{ libelleStatut(ancien) }}
+                } @else {
+                  —
+                }
+              </td>
+              <td>
+                <np-status-badge
+                  [statut]="entree.nouveau"
+                  [libelle]="libelleStatut(entree.nouveau)"
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </np-table>
   </np-card>
 
   <div class="modification">
+    @if (peutAvancer()) {
+      <np-button variant="principal" (click)="passerAuStatutSuivant()">
+        Passer à l'étape suivante
+      </np-button>
+    }
     @if (editionOuverte) {
       <div class="edition">
         <np-form-field label="Nouvelle date de retrait" controlId="date-retrait-ticket">
@@ -69,7 +113,7 @@
       @if (erreurEdition; as message) {
         <p class="erreur" role="alert">{{ message }}</p>
       }
-    } @else {
+    } @else if (depot.statut !== 'livre') {
       <np-button variant="secondaire" (click)="ouvrirEdition()">
         Modifier la date de retrait
       </np-button>

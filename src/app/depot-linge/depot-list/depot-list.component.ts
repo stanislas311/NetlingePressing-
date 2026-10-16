@@ -10,7 +10,9 @@ import {
   dateRetraitEnIso,
   Depot,
   DepotArticle,
+  DepotStatut,
   jourLocal,
+  STATUTS_ORDE,
   STATUT_LABELS,
 } from '../models/depot.model';
 import { DepotStoreService } from '../services/depot-store.service';
@@ -32,19 +34,39 @@ export class DepotListComponent {
   private readonly store = inject(DepotStoreService);
 
   readonly recherche = new FormControl('', { nonNullable: true });
+  readonly filtreStatut = new FormControl<DepotStatut | ''>('', { nonNullable: true });
   readonly dateEdition = new FormControl('', { nonNullable: true });
+  readonly statutsDisponibles = STATUTS_ORDE;
+  readonly labelsStatuts = STATUT_LABELS;
   depots: Depot[] = [];
   depotEnEdition: string | null = null;
   erreurEdition: string | null = null;
 
   constructor() {
-    this.recherche.valueChanges.pipe(startWith('')).subscribe((requete) => {
-      this.depots = this.store.rechercherDepots(requete);
-    });
+    const majListe = () => {
+      this.depots = this.store.rechercherDepots(
+        this.recherche.value,
+        this.filtreStatut.value || undefined
+      );
+    };
+    this.recherche.valueChanges.pipe(startWith('')).subscribe(majListe);
+    this.filtreStatut.valueChanges.pipe(startWith('')).subscribe(majListe);
   }
 
   libelleStatut(depot: Depot): string {
     return STATUT_LABELS[depot.statut];
+  }
+
+  peutAvancer(depot: Depot): boolean {
+    return depot.statut !== 'livre';
+  }
+
+  passerAuStatutSuivant(depot: Depot): void {
+    this.store.passerAuStatutSuivant(depot.id);
+    this.depots = this.store.rechercherDepots(
+      this.recherche.value,
+      this.filtreStatut.value || undefined
+    );
   }
 
   formaterDate(iso: string): string {
@@ -83,6 +105,9 @@ export class DepotListComponent {
     }
     this.depotEnEdition = null;
     this.erreurEdition = null;
-    this.depots = this.store.rechercherDepots(this.recherche.value);
+    this.depots = this.store.rechercherDepots(
+      this.recherche.value,
+      this.filtreStatut.value || undefined
+    );
   }
 }

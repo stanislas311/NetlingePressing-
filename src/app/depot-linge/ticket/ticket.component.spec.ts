@@ -156,4 +156,66 @@ describe('TicketComponent', () => {
       expect(composant.depot!.dateRetraitPrevue).toBe(depot.dateRetraitPrevue);
     });
   });
+
+  describe('circuit de statuts', () => {
+    async function creerAvecDepot(): Promise<{ depot: Depot; composant: TicketComponent }> {
+      const depot = new DepotStoreService().creerDepot({
+        clientNom: 'Awa Diallo',
+        clientTelephone: '07 12 34 56 78',
+        articles: [{ type: 'Chemise', quantite: 2, service: 'Lavage' }],
+      });
+      const composant = await creerComposant(depot.id);
+      return { depot, composant };
+    }
+
+    it("propose le bouton Passer à l'étape suivante pour un dépôt non livré", async () => {
+      await creerAvecDepot();
+      const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';
+      expect(texte).toContain("Passer à l'étape suivante");
+    });
+
+    it("avance le statut au clic sur le bouton", async () => {
+      const { composant } = await creerAvecDepot();
+      composant.passerAuStatutSuivant();
+      fixture.detectChanges();
+      expect(composant.depot!.statut).toBe('en-lavage');
+      const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';
+      expect(texte).toContain('En lavage');
+    });
+
+    it("affiche l'historique des statuts du plus ancien au plus récent", async () => {
+      const { composant } = await creerAvecDepot();
+      composant.passerAuStatutSuivant();
+      fixture.detectChanges();
+      const lignes = (fixture.nativeElement as HTMLElement).querySelectorAll(
+        'table.historique tbody tr'
+      );
+      expect(lignes.length).toBe(2);
+      expect(lignes[0].textContent).toContain('Déposé');
+      expect(lignes[1].textContent).toContain('En lavage');
+    });
+
+    it("masque le bouton et l'édition de date sur un dépôt livré", async () => {
+      const { composant } = await creerAvecDepot();
+      composant.passerAuStatutSuivant();
+      composant.passerAuStatutSuivant();
+      composant.passerAuStatutSuivant();
+      fixture.detectChanges();
+      expect(composant.depot!.statut).toBe('livre');
+      const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';
+      expect(texte).not.toContain("Passer à l'étape suivante");
+      expect(texte).not.toContain('Modifier la date de retrait');
+    });
+
+    it("affiche la date et l'heure réelles du retrait pour un dépôt livré", async () => {
+      const { composant } = await creerAvecDepot();
+      composant.passerAuStatutSuivant();
+      composant.passerAuStatutSuivant();
+      composant.passerAuStatutSuivant();
+      fixture.detectChanges();
+      const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';
+      expect(texte).toContain('Retiré le');
+      expect(composant.depot!.dateRetraitReelle).toBeDefined();
+    });
+  });
 });
