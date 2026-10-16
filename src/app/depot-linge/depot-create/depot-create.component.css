@@ -1,0 +1,93 @@
+:host {
+  display: block;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+}
+
+legend {
+  font-weight: 600;
+  padding-inline: 0.5rem;
+}
+
+.champ {
+  margin-bottom: 0.85rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.article {
+  border: 1px dashed #bbb;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.erreur {
+  color: #b00020;
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+}
+
+.confirmation {
+  background: #e7f5e9;
+  border: 1px solid #2e7d32;
+  color: #1b5e20;
+  padding: 0.6rem 0.8rem;
+  border-radius: 4px;
+}
+
+button {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #888;
+  border-radius: 4px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.principal {
+  background: #1565c0;
+  border-color: #1565c0;
+  color: #fff;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.annuler {
+  color: #1565c0;
+}

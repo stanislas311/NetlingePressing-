@@ -1,0 +1,55 @@
+@if (depot; as d) {
+  <article class="ticket">
+    <header class="entete">
+      <h2>Ticket de dépôt</h2>
+      <p class="numero">{{ d.ticketNumero }}</p>
+    </header>
+
+    <dl class="infos">
+      <div>
+        <dt>Date de dépôt</dt>
+        <dd>{{ formaterDate(d.dateDepot) }}</dd>
+      </div>
+      <div>
+        <dt>Date de retrait prévue</dt>
+        <dd>{{ formaterDate(d.dateRetraitPrevue) }}</dd>
+      </div>
+      <div>
+        <dt>Statut</dt>
+        <dd>{{ libelleStatut(d.statut) }}</dd>
+      </div>
+      <div>
+        <dt>Client</dt>
+        <dd>{{ d.clientNom }} ({{ d.clientTelephone }})</dd>
+      </div>
+    </dl>
+
+    <h3>Articles déposés</h3>
+    <table class="articles">
+      <thead>
+        <tr>
+          <th scope="col">Type d'article</th>
+          <th scope="col">Quantité</th>
+          <th scope="col">Service demandé</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (article of d.articles; track $index) {
+          <tr>
+            <td>{{ article.type }}</td>
+            <td>{{ article.quantite }}</td>
+            <td>{{ article.service }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </article>
+
+  <div class="actions">
+    <button type="button" class="imprimer" (click)="imprimer()">Imprimer</button>
+    <a routerLink="/depots">Retour à la liste</a>
+  </div>
+} @else {
+  <p class="introuvable" role="alert">Ticket introuvable.</p>
+  <a routerLink="/depots">Retour à la liste</a>
+}

@@ -1,0 +1,69 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.entete h2 {
+  margin: 0;
+}
+
+.nouveau {
+  color: #fff;
+  background: #1565c0;
+  border-radius: 4px;
+  padding: 0.5rem 0.9rem;
+  text-decoration: none;
+}
+
+.recherche {
+  margin-bottom: 1rem;
+}
+
+.recherche label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.recherche input {
+  width: 100%;
+  max-width: 420px;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.liste {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.liste th,
+.liste td {
+  border: 1px solid #ccc;
+  padding: 0.45rem 0.5rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.liste th {
+  background: #f2f2f2;
+}
+
+.vide {
+  color: #555;
+  font-style: italic;
+}
+
+.liste a {
+  color: #1565c0;
+}

@@ -1,0 +1,47 @@
+<div class="entete">
+  <h2>Dépôts de linge</h2>
+  <a routerLink="/depots/nouveau" class="nouveau">Nouveau dépôt</a>
+</div>
+
+<div class="recherche">
+  <label for="recherche">Rechercher par numéro de ticket ou par nom de client</label>
+  <input
+    id="recherche"
+    type="search"
+    [formControl]="recherche"
+    placeholder="Ex. DP-2026 ou Awa"
+  />
+</div>
+
+@if (depots.length === 0) {
+  <p class="vide" role="status">Aucun dépôt trouvé.</p>
+} @else {
+  <table class="liste">
+    <thead>
+      <tr>
+        <th scope="col">Ticket</th>
+        <th scope="col">Client</th>
+        <th scope="col">Articles</th>
+        <th scope="col">Déposé le</th>
+        <th scope="col">Retrait prévu</th>
+        <th scope="col">Statut</th>
+        <th scope="col">Ticket</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (depot of depots; track depot.id) {
+        <tr>
+          <td>{{ depot.ticketNumero }}</td>
+          <td>{{ depot.clientNom }}</td>
+          <td>{{ formaterArticles(depot.articles) }}</td>
+          <td>{{ formaterDate(depot.dateDepot) }}</td>
+          <td>{{ formaterDate(depot.dateRetraitPrevue) }}</td>
+          <td>{{ libelleStatut(depot) }}</td>
+          <td>
+            <a [routerLink]="['/depots', depot.id, 'ticket']">Voir le ticket</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

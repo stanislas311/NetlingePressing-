@@ -1,0 +1,109 @@
+<h2>Nouveau dépôt de linge</h2>
+
+@if (messageConfirmation) {
+  <p class="confirmation" role="status">{{ messageConfirmation }}</p>
+}
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <fieldset formGroupName="client">
+    <legend>Client</legend>
+
+    <div class="champ">
+      <label for="nom">Nom du client</label>
+      <input
+        id="nom"
+        type="text"
+        formControlName="nom"
+        autocomplete="off"
+        placeholder="Nom et prénom"
+      />
+      @if (erreurClient('nom'); as message) {
+        <p class="erreur" role="alert">{{ message }}</p>
+      }
+    </div>
+
+    <div class="champ">
+      <label for="telephone">Téléphone</label>
+      <input
+        id="telephone"
+        type="tel"
+        formControlName="telephone"
+        autocomplete="off"
+        placeholder="Ex. 07 12 34 56 78"
+      />
+      @if (erreurClient('telephone'); as message) {
+        <p class="erreur" role="alert">{{ message }}</p>
+      }
+    </div>
+  </fieldset>
+
+  <fieldset formArrayName="articles">
+    <legend>Articles du dépôt</legend>
+
+    @for (article of articles.controls; track $index; let i = $index) {
+      <div class="article" [formGroupName]="i">
+        <div class="champ">
+          <label [for]="'type-' + i">Type d'article</label>
+          <input
+            [id]="'type-' + i"
+            type="text"
+            formControlName="type"
+            placeholder="Ex. Chemise"
+          />
+          @if (erreurArticle(i, 'type'); as message) {
+            <p class="erreur" role="alert">{{ message }}</p>
+          }
+        </div>
+
+        <div class="champ">
+          <label [for]="'quantite-' + i">Quantité</label>
+          <input
+            [id]="'quantite-' + i"
+            type="number"
+            formControlName="quantite"
+            min="1"
+            step="1"
+          />
+          @if (erreurArticle(i, 'quantite'); as message) {
+            <p class="erreur" role="alert">{{ message }}</p>
+          }
+        </div>
+
+        <div class="champ">
+          <label [for]="'service-' + i">Service demandé</label>
+          <input
+            [id]="'service-' + i"
+            type="text"
+            formControlName="service"
+            placeholder="Ex. Lavage, Repassage"
+          />
+          @if (erreurArticle(i, 'service'); as message) {
+            <p class="erreur" role="alert">{{ message }}</p>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="retirer"
+          (click)="supprimerArticle(i)"
+          [disabled]="articles.length === 1"
+        >
+          Retirer l'article
+        </button>
+      </div>
+    }
+
+    @if (afficherErreurAucunArticle) {
+      <p class="erreur" role="alert">Ajoutez au moins un article complet pour le dépôt.</p>
+    }
+
+    <button type="button" class="ajouter" (click)="ajouterArticle()">
+      Ajouter un article
+    </button>
+  </fieldset>
+
+  <div class="actions">
+    <button type="submit" class="principal">Enregistrer le dépôt</button>
+    <a routerLink="/depots" class="annuler">Annuler</a>
+  </div>
+</form>
