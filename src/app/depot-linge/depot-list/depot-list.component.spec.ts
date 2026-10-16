@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { DepotListComponent } from './depot-list.component';
 import { DepotStoreService } from '../services/depot-store.service';
+import { jourLocal } from '../models/depot.model';
 
 describe('DepotListComponent', () => {
   let fixture: ComponentFixture<DepotListComponent>;
@@ -90,5 +91,83 @@ describe('DepotListComponent', () => {
     ).map((a) => a.getAttribute('href'));
     expect(liens.some((h) => h?.endsWith('/ticket') ?? false)).toBeTrue();
     expect(liens.some((h) => h?.includes('/depots/nouveau') ?? false)).toBeTrue();
+  });
+
+  describe("modification de la date de retrait depuis la liste", () => {
+    function boutons(texteRecherche: string): HTMLButtonElement[] {
+      return Array.from(
+        (fixture.nativeElement as HTMLElement).querySelectorAll('button')
+      ).filter((b) => (b.textContent ?? '').includes(texteRecherche));
+    }
+
+    it('propose une action Modifier la date de retrait sur chaque ligne', () => {
+      expect(boutons('Modifier la date de retrait').length).toBe(2);
+    });
+
+    it("ouvre un champ date pré-rempli avec la date de retrait courante du dépôt", () => {
+      const depot = store.listerDepots()[0];
+      component.ouvrirEdition(depot);
+      fixture.detectChanges();
+
+      expect(component.depotEnEdition).toBe(depot.id);
+      expect(component.dateEdition.value).toBe(
+        jourLocal(new Date(depot.dateRetraitPrevue))
+      );
+      const champ = (fixture.nativeElement as HTMLElement).querySelector(
+        'input[type="date"]'
+      ) as HTMLInputElement;
+      expect(champ).not.toBeNull();
+      expect(champ.value).toBe(component.dateEdition.value);
+    });
+
+    it('enregistre la nouvelle date de retrait quand elle est postérieure au dépôt', () => {
+      const depot = store.listerDepots()[0];
+      const nouvelleDate = new Date(Date.now() + 5 * 86_400_000);
+      const attendu = jourLocal(nouvelleDate);
+
+      component.ouvrirEdition(depot);
+      component.dateEdition.setValue(attendu);
+      component.confirmerEdition(depot);
+      fixture.detectChanges();
+
+      expect(component.depotEnEdition).toBeNull();
+      expect(component.erreurEdition).toBeNull();
+      const enregistre = store.getDepotById(depot.id)!;
+      expect(jourLocal(new Date(enregistre.dateRetraitPrevue))).toBe(attendu);
+      expect(component.depots[0].dateRetraitPrevue).toBe(
+        enregistre.dateRetraitPrevue
+      );
+    });
+
+    it("refuse une date antérieure avec un message et sans modifier la date", () => {
+      const depot = store.listerDepots()[0];
+      const avant = store.getDepotById(depot.id)!.dateRetraitPrevue;
+      const anterieure = new Date(Date.now() - 2 * 86_400_000);
+      const saisie = `${anterieure.getFullYear()}-${String(anterieure.getMonth() + 1).padStart(2, '0')}-${String(anterieure.getDate()).padStart(2, '0')}`;
+
+      component.ouvrirEdition(depot);
+      component.dateEdition.setValue(saisie);
+      component.confirmerEdition(depot);
+      fixture.detectChanges();
+
+      expect(component.erreurEdition).toBe(
+        'La date de retrait ne peut pas être antérieure à la date de dépôt.'
+      );
+      expect(store.getDepotById(depot.id)!.dateRetraitPrevue).toBe(avant);
+      const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';
+      expect(texte).toContain(
+        'La date de retrait ne peut pas être antérieure à la date de dépôt.'
+      );
+    });
+
+    it("annule l'édition sans rien modifier", () => {
+      const depot = store.listerDepots()[0];
+      const avant = store.getDepotById(depot.id)!.dateRetraitPrevue;
+      component.ouvrirEdition(depot);
+      component.annulerEdition();
+      fixture.detectChanges();
+      expect(component.depotEnEdition).toBeNull();
+      expect(store.getDepotById(depot.id)!.dateRetraitPrevue).toBe(avant);
+    });
   });
 });

@@ -45,6 +45,34 @@
     </table>
   </article>
 
+  <div class="modification">
+    @if (editionOuverte) {
+      <div class="edition">
+        <div class="champ">
+          <label for="date-retrait-ticket">Nouvelle date de retrait</label>
+          <input
+            id="date-retrait-ticket"
+            type="date"
+            [formControl]="dateEdition"
+          />
+        </div>
+        <button type="button" class="enregistrer" (click)="enregistrerDateRetrait()">
+          Enregistrer
+        </button>
+        <button type="button" class="annuler" (click)="annulerEdition()">
+          Annuler
+        </button>
+      </div>
+      @if (erreurEdition; as message) {
+        <p class="erreur" role="alert">{{ message }}</p>
+      }
+    } @else {
+      <button type="button" class="modifier" (click)="ouvrirEdition()">
+        Modifier la date de retrait
+      </button>
+    }
+  </div>
+
   <div class="actions">
     <button type="button" class="imprimer" (click)="imprimer()">Imprimer</button>
     <a routerLink="/depots">Retour à la liste</a>

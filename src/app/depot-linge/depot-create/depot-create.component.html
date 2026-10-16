@@ -37,6 +37,18 @@
     </div>
   </fieldset>
 
+  <fieldset>
+    <legend>Date de retrait prévue</legend>
+
+    <div class="champ">
+      <label for="dateRetrait">Date de retrait</label>
+      <input id="dateRetrait" type="date" formControlName="dateRetrait" />
+      @if (erreurDateRetrait(); as message) {
+        <p class="erreur" role="alert">{{ message }}</p>
+      }
+    </div>
+  </fieldset>
+
   <fieldset formArrayName="articles">
     <legend>Articles du dépôt</legend>
 

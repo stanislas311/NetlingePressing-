@@ -120,6 +120,65 @@ describe('DepotStoreService', () => {
     });
   });
 
+  describe('modifierDateRetrait', () => {
+    let depot: ReturnType<DepotStoreService['creerDepot']>;
+
+    beforeEach(() => {
+      depot = service.creerDepot(creation);
+    });
+
+    it("met à jour la date de retrait et l'engage dans le localStorage", () => {
+      const nouvelleDate = new Date(
+        depot.dateRetraitPrevue
+      );
+      nouvelleDate.setDate(nouvelleDate.getDate() + 3);
+
+      const resultat = service.modifierDateRetrait(depot.id, nouvelleDate.toISOString());
+
+      expect(resultat).not.toBeNull();
+      expect(resultat!.dateRetraitPrevue).toBe(nouvelleDate.toISOString());
+      expect(service.getDepotById(depot.id)!.dateRetraitPrevue).toBe(
+        nouvelleDate.toISOString()
+      );
+    });
+
+    it('conserve les autres champs du dépôt', () => {
+      const nouvelleDate = new Date(Date.now() + 96 * 3_600_000).toISOString();
+      const resultat = service.modifierDateRetrait(depot.id, nouvelleDate);
+      expect(resultat!.ticketNumero).toBe(depot.ticketNumero);
+      expect(resultat!.clientNom).toBe(depot.clientNom);
+      expect(resultat!.articles).toEqual(depot.articles);
+      expect(resultat!.dateDepot).toBe(depot.dateDepot);
+    });
+
+    it('retourne null pour un dépôt introuvable', () => {
+      expect(
+        service.modifierDateRetrait('inconnu', new Date(Date.now() + 96 * 3_600_000).toISOString())
+      ).toBeNull();
+    });
+
+    it('refuse une date antérieure à la date de dépôt sans rien modifier', () => {
+      const avant = service.getDepotById(depot.id)!.dateRetraitPrevue;
+      const anterieure = new Date(depot.dateDepot);
+      anterieure.setDate(anterieure.getDate() - 1);
+
+      const resultat = service.modifierDateRetrait(depot.id, anterieure.toISOString());
+
+      expect(resultat).toBeNull();
+      expect(service.getDepotById(depot.id)!.dateRetraitPrevue).toBe(avant);
+    });
+
+    it('accepte une date de retrait le même jour que le dépôt', () => {
+      const memeJour = new Date(depot.dateDepot);
+      memeJour.setHours(memeJour.getHours() + 1);
+
+      const resultat = service.modifierDateRetrait(depot.id, memeJour.toISOString());
+
+      expect(resultat).not.toBeNull();
+      expect(resultat!.dateRetraitPrevue).toBe(memeJour.toISOString());
+    });
+  });
+
   describe('rechercherDepots', () => {
     beforeEach(() => {
       service.creerDepot(creation);

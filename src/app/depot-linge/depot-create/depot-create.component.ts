@@ -9,7 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { DepotStoreService } from '../services/depot-store.service';
+import { dateRetraitValide, jourLocal } from '../models/depot.model';
+import { DELAI_RETRAIT_HEURES, DepotStoreService } from '../services/depot-store.service';
 
 export function telephoneValidator(control: AbstractControl): ValidationErrors | null {
   const valeur: string = control.value ?? '';
@@ -24,6 +25,14 @@ export function telephoneValidator(control: AbstractControl): ValidationErrors |
     return { telephone: true };
   }
   return null;
+}
+
+export function dateRetraitValidator(control: AbstractControl): ValidationErrors | null {
+  const valeur: string = control.value ?? '';
+  if (!valeur) {
+    return null;
+  }
+  return dateRetraitValide(valeur, jourLocal(new Date())) ? null : { dateRetraitAnterieure: true };
 }
 
 @Component({
@@ -45,6 +54,10 @@ export class DepotCreateComponent {
       nom: ['', [Validators.required, Validators.maxLength(120)]],
       telephone: ['', [Validators.required, telephoneValidator]],
     }),
+    dateRetrait: [
+      jourLocal(new Date(Date.now() + DELAI_RETRAIT_HEURES * 3_600_000)),
+      [Validators.required, dateRetraitValidator],
+    ],
     articles: this.fb.array([this.creerArticle()]),
   });
 
@@ -107,11 +120,26 @@ export class DepotCreateComponent {
     return this.soumis && this.articlesValides.length === 0;
   }
 
+  erreurDateRetrait(): string | null {
+    const control = this.form.get('dateRetrait');
+    if (!control || control.valid || (!control.touched && !this.soumis)) {
+      return null;
+    }
+    if (control.hasError('required')) {
+      return 'La date de retrait est obligatoire.';
+    }
+    if (control.hasError('dateRetraitAnterieure')) {
+      return 'La date de retrait ne peut pas être antérieure à la date de dépôt.';
+    }
+    return null;
+  }
+
   onSubmit(): void {
     this.soumis = true;
     const clientValide = this.form.get('client')!.valid;
+    const dateRetraitValideForm = this.form.get('dateRetrait')!.valid;
     const articlesValides = this.articlesValides;
-    if (!clientValide || articlesValides.length === 0) {
+    if (!clientValide || !dateRetraitValideForm || articlesValides.length === 0) {
       this.form.markAllAsTouched();
       return;
     }
@@ -119,6 +147,7 @@ export class DepotCreateComponent {
     const depot = this.store.creerDepot({
       clientNom: client.nom.trim(),
       clientTelephone: client.telephone.trim(),
+      dateRetrait: this.form.get('dateRetrait')!.value,
       articles: articlesValides.map((g) => ({
         type: String(g.value.type).trim(),
         quantite: Number(g.value.quantite),

@@ -35,7 +35,35 @@
           <td>{{ depot.clientNom }}</td>
           <td>{{ formaterArticles(depot.articles) }}</td>
           <td>{{ formaterDate(depot.dateDepot) }}</td>
-          <td>{{ formaterDate(depot.dateRetraitPrevue) }}</td>
+          <td>
+            @if (depotEnEdition === depot.id) {
+              <div class="edition">
+                <input
+                  type="date"
+                  [formControl]="dateEdition"
+                  [attr.aria-label]="'Nouvelle date de retrait pour ' + depot.ticketNumero"
+                />
+                <button type="button" class="confirmer" (click)="confirmerEdition(depot)">
+                  Confirmer
+                </button>
+                <button type="button" class="annuler" (click)="annulerEdition()">
+                  Annuler
+                </button>
+              </div>
+              @if (erreurEdition; as message) {
+                <p class="erreur" role="alert">{{ message }}</p>
+              }
+            } @else {
+              <span>{{ formaterDate(depot.dateRetraitPrevue) }}</span>
+              <button
+                type="button"
+                class="modifier"
+                (click)="ouvrirEdition(depot)"
+              >
+                Modifier la date de retrait
+              </button>
+            }
+          </td>
           <td>{{ libelleStatut(depot) }}</td>
           <td>
             <a [routerLink]="['/depots', depot.id, 'ticket']">Voir le ticket</a>

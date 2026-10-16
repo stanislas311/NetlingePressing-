@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { DepotCreateComponent } from './depot-create.component';
-import { DepotStoreService } from '../services/depot-store.service';
-import { Depot } from '../models/depot.model';
+import { DepotStoreService, DELAI_RETRAIT_HEURES } from '../services/depot-store.service';
+import { Depot, jourLocal } from '../models/depot.model';
 
 describe('DepotCreateComponent', () => {
   let fixture: ComponentFixture<DepotCreateComponent>;
@@ -106,6 +106,9 @@ describe('DepotCreateComponent', () => {
     expect(storeSpy.creerDepot).toHaveBeenCalledWith({
       clientNom: 'Awa Diallo',
       clientTelephone: '07 12 34 56 78',
+      dateRetrait: jourLocal(
+        new Date(Date.now() + DELAI_RETRAIT_HEURES * 3_600_000)
+      ),
       articles: [{ type: 'Chemise', quantite: 2, service: 'Lavage' }],
     });
     expect(navigateSpy).toHaveBeenCalledWith(['/depots', 'dep-1', 'ticket']);
@@ -122,5 +125,74 @@ describe('DepotCreateComponent', () => {
     component.form.get(['client', 'telephone'])!.setValue('(07) 12.34.56.78');
     component.form.get(['client', 'telephone'])!.markAsTouched();
     expect(component.erreurClient('telephone')).toBeNull();
+  });
+
+  describe('champ date de retrait', () => {
+    function remplirFormulaire(): void {
+      component.form.get(['client', 'nom'])!.setValue('Awa Diallo');
+      component.form.get(['client', 'telephone'])!.setValue('07 12 34 56 78');
+      const article = component.articles.at(0);
+      article.get('type')!.setValue('Chemise');
+      article.get('quantite')!.setValue(2);
+      article.get('service')!.setValue('Lavage');
+    }
+
+    it("pré-remplit la date de retrait avec la date de dépôt plus 48 heures", () => {
+      const attendu = jourLocal(
+        new Date(Date.now() + DELAI_RETRAIT_HEURES * 3_600_000)
+      );
+      expect(component.form.get('dateRetrait')!.value).toBe(attendu);
+    });
+
+    it('accepte une date de retrait postérieure à la date de dépôt', () => {
+      remplirFormulaire();
+      component.form
+        .get('dateRetrait')!
+        .setValue(jourLocal(new Date(Date.now() + 96 * 3_600_000)));
+      component.onSubmit();
+      expect(storeSpy.creerDepot).toHaveBeenCalledTimes(1);
+      expect(component.erreurDateRetrait()).toBeNull();
+    });
+
+    it('accepte une date de retrait le même jour que le dépôt', () => {
+      remplirFormulaire();
+      component.form.get('dateRetrait')!.setValue(jourLocal(new Date()));
+      component.onSubmit();
+      expect(storeSpy.creerDepot).toHaveBeenCalledTimes(1);
+    });
+
+    it('bloque la soumission et signale une date de retrait antérieure', () => {
+      remplirFormulaire();
+      component.form
+        .get('dateRetrait')!
+        .setValue(jourLocal(new Date(Date.now() - 86_400_000)));
+      component.form.get('dateRetrait')!.markAsTouched();
+
+      component.onSubmit();
+
+      expect(storeSpy.creerDepot).not.toHaveBeenCalled();
+      expect(navigateSpy).not.toHaveBeenCalled();
+      expect(component.erreurDateRetrait()).toBe(
+        'La date de retrait ne peut pas être antérieure à la date de dépôt.'
+      );
+      fixture.detectChanges();
+      const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';
+      expect(texte).toContain(
+        'La date de retrait ne peut pas être antérieure à la date de dépôt.'
+      );
+    });
+
+    it('transmet la date de retrait choisie au service de création', () => {
+      remplirFormulaire();
+      const choisie = jourLocal(new Date(Date.now() + 120 * 3_600_000));
+      component.form.get('dateRetrait')!.setValue(choisie);
+
+      component.onSubmit();
+
+      expect(storeSpy.creerDepot).toHaveBeenCalledTimes(1);
+      expect(storeSpy.creerDepot.calls.mostRecent().args[0].dateRetrait).toBe(
+        choisie
+      );
+    });
   });
 });

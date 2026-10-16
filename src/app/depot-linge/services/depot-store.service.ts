@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Client, Depot, DepotCreation } from '../models/depot.model';
+import {
+  Client,
+  dateRetraitEnIso,
+  dateRetraitValide,
+  Depot,
+  DepotCreation,
+} from '../models/depot.model';
 
 export const CLE_DEPOTS = 'netlinge.deposits';
 export const CLE_CLIENTS = 'netlinge.customers';
@@ -14,6 +20,17 @@ export class DepotStoreService {
     const sequence = this.lireCompteur() + 1;
     this.ecrire(CLE_COMPTEUR_TICKET, String(sequence));
 
+    const dateDepotIso = maintenant.toISOString();
+    const dateRetraitChoisie = creation.dateRetrait
+      ? dateRetraitEnIso(creation.dateRetrait, dateDepotIso)
+      : null;
+    const dateRetraitPrevue =
+      dateRetraitChoisie && dateRetraitValide(dateRetraitChoisie, dateDepotIso)
+        ? dateRetraitChoisie
+        : new Date(
+            maintenant.getTime() + DELAI_RETRAIT_HEURES * 3_600_000
+          ).toISOString();
+
     const depot: Depot = {
       id: this.genererId(),
       ticketNumero: this.genererNumeroTicket(maintenant, sequence),
@@ -22,10 +39,8 @@ export class DepotStoreService {
       clientTelephone: client.telephone,
       articles: creation.articles.map((a) => ({ ...a })),
       statut: 'depose',
-      dateDepot: maintenant.toISOString(),
-      dateRetraitPrevue: new Date(
-        maintenant.getTime() + DELAI_RETRAIT_HEURES * 3_600_000
-      ).toISOString(),
+      dateDepot: dateDepotIso,
+      dateRetraitPrevue,
     };
 
     const depots = this.listerDepots();
@@ -62,6 +77,22 @@ export class DepotStoreService {
 
   getDepotById(id: string): Depot | undefined {
     return this.listerDepots().find((d) => d.id === id);
+  }
+
+  modifierDateRetrait(depotId: string, nouvelleDateIso: string): Depot | null {
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return null;
+    }
+    const depot = depots[index];
+    if (!dateRetraitValide(nouvelleDateIso, depot.dateDepot)) {
+      return null;
+    }
+    const misAJour: Depot = { ...depot, dateRetraitPrevue: nouvelleDateIso };
+    depots[index] = misAJour;
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    return misAJour;
   }
 
   private enregistrerClient(nom: string, telephone: string): Client {

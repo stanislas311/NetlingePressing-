@@ -1,6 +1,13 @@
 import { Component, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Depot, STATUT_LABELS, DepotStatut } from '../models/depot.model';
+import {
+  dateRetraitEnIso,
+  Depot,
+  STATUT_LABELS,
+  DepotStatut,
+  jourLocal,
+} from '../models/depot.model';
 import { DepotStoreService } from '../services/depot-store.service';
 
 const formateurDate = new Intl.DateTimeFormat('fr-FR', {
@@ -13,7 +20,7 @@ const formateurDate = new Intl.DateTimeFormat('fr-FR', {
 
 @Component({
   selector: 'app-ticket',
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './ticket.component.html',
   styleUrl: './ticket.component.css',
 })
@@ -22,6 +29,9 @@ export class TicketComponent {
   private readonly store = inject(DepotStoreService);
 
   depot: Depot | undefined;
+  readonly dateEdition = new FormControl('', { nonNullable: true });
+  editionOuverte = false;
+  erreurEdition: string | null = null;
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
@@ -38,5 +48,42 @@ export class TicketComponent {
 
   imprimer(): void {
     window.print();
+  }
+
+  ouvrirEdition(): void {
+    if (!this.depot) {
+      return;
+    }
+    this.dateEdition.setValue(jourLocal(new Date(this.depot.dateRetraitPrevue)));
+    this.editionOuverte = true;
+    this.erreurEdition = null;
+  }
+
+  annulerEdition(): void {
+    this.editionOuverte = false;
+    this.erreurEdition = null;
+  }
+
+  enregistrerDateRetrait(): void {
+    if (!this.depot) {
+      return;
+    }
+    const saisie = this.dateEdition.value;
+    if (!saisie) {
+      this.erreurEdition = 'La date de retrait est obligatoire.';
+      return;
+    }
+    const nouvelleDateIso = dateRetraitEnIso(saisie, this.depot.dateDepot);
+    const resultat = nouvelleDateIso
+      ? this.store.modifierDateRetrait(this.depot.id, nouvelleDateIso)
+      : null;
+    if (!resultat) {
+      this.erreurEdition =
+        'La date de retrait ne peut pas être antérieure à la date de dépôt.';
+      return;
+    }
+    this.depot = this.store.getDepotById(this.depot.id);
+    this.editionOuverte = false;
+    this.erreurEdition = null;
   }
 }
