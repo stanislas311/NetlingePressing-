@@ -1,13 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AuthService, CLE_SESSION, CLE_UTILISATEURS } from './auth/services/auth.service';
+import { COMPTES_DEMO } from './auth/models/utilisateur.model';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideRouter([])],
     }).compileComponents();
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it('should create the app', () => {
@@ -22,35 +29,42 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('Netlinge Pressing');
   });
 
-  it('should render title on the home screen', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Netlinge Pressing');
-  });
-
-  it('should provide a link to the deposits list', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const liens = Array.from(
-      (fixture.nativeElement as HTMLElement).querySelectorAll('a')
-    ).map((a) => a.getAttribute('href'));
-    expect(liens).toContain('/depots');
-  });
-
-  it("affiche l'en-tête avec le nom de l'application et la zone utilisateur", () => {
+  it("affiche l'en-tête avec le nom de l'application et un lien Connexion", () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const entete = (fixture.nativeElement as HTMLElement).querySelector(
       '.np-entete-application'
     )!;
     expect(entete.textContent).toContain('Netlinge Pressing');
-    const zone = entete.querySelector('.np-utilisateur')!;
-    expect(zone.getAttribute('aria-disabled')).toBe('true');
-    expect(zone.getAttribute('title')).toBe('Connexion à venir');
+    const connexion = entete.querySelector('.np-lien-connexion');
+    expect(connexion?.getAttribute('href')).toBe('/connexion');
   });
 
-  it("bascule le menu mobile et met à jour les attributs ARIA", () => {
+  it("n'affiche pas la navigation tant que l'utilisateur n'est pas connecté", () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('#np-navigation')).toBeNull();
+  });
+
+  it("affiche le nom, le rôle et la déconnexion une fois connecté", async () => {
+    const auth = TestBed.inject(AuthService);
+    await auth.initialiser();
+    await auth.connecter(COMPTES_DEMO.gerant.identifiant, COMPTES_DEMO.gerant.motDePasse);
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const entete = (fixture.nativeElement as HTMLElement).querySelector(
+      '.np-entete-application'
+    )!;
+    expect(entete.textContent).toContain(COMPTES_DEMO.gerant.nom);
+    expect(entete.textContent).toContain('Gérant');
+    expect(entete.textContent).toContain('Déconnexion');
+    expect(fixture.nativeElement.querySelector('#np-navigation')).not.toBeNull();
+  });
+
+  it("bascule le menu mobile et met à jour les attributs ARIA", async () => {
+    const auth = TestBed.inject(AuthService);
+    await auth.initialiser();
+    await auth.connecter(COMPTES_DEMO.gerant.identifiant, COMPTES_DEMO.gerant.motDePasse);
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const app = fixture.componentInstance;
@@ -86,11 +100,12 @@ describe('AppComponent', () => {
     expect(app.menuOuvert).toBeFalse();
   });
 
-  it("affiche la page d'accueil dans la zone principale", () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const main = (fixture.nativeElement as HTMLElement).querySelector('main.np-contenu')!;
-    expect(main.querySelector('h1')?.textContent).toContain('Netlinge Pressing');
-    expect(main.textContent).toContain('Gestion des dépôts de linge');
+  it('ne laisse pas de mot de passe en clair dans le stockage', async () => {
+    const auth = TestBed.inject(AuthService);
+    await auth.initialiser();
+    const brut = localStorage.getItem(CLE_UTILISATEURS) ?? '';
+    expect(brut).not.toContain(COMPTES_DEMO.gerant.motDePasse);
+    expect(brut).not.toContain(COMPTES_DEMO.receptionniste.motDePasse);
+    expect(localStorage.getItem(CLE_SESSION)).toBeNull();
   });
 });

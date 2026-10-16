@@ -1,0 +1,33 @@
+<np-card class="connexion">
+  <h1>Connexion</h1>
+  <p class="intro">Accédez à l'espace de gestion de Netlinge Pressing.</p>
+
+  <form [formGroup]="formulaire" (ngSubmit)="soumettre()">
+    <np-form-field label="Identifiant" controlId="identifiant" [erreur]="null">
+      <input
+        id="identifiant"
+        type="text"
+        autocomplete="username"
+        formControlName="identifiant"
+        [attr.aria-invalid]="formulaire.controls.identifiant.invalid && formulaire.touched"
+      />
+    </np-form-field>
+
+    <np-form-field label="Mot de passe" controlId="mot-de-passe">
+      <input
+        id="mot-de-passe"
+        type="password"
+        autocomplete="current-password"
+        formControlName="motDePasse"
+      />
+    </np-form-field>
+
+    @if (erreur; as message) {
+      <p class="erreur" role="alert">{{ message }}</p>
+    }
+
+    <np-button variant="principal" type="submit" [disabled]="enCours">Se connecter</np-button>
+  </form>
+
+  <p class="retour"><a routerLink="/">Retour à l'accueil</a></p>
+</np-card>

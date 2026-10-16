@@ -26,7 +26,8 @@ import { Component, Input } from '@angular/core';
       font-size: 0.95rem;
     }
 
-    .np-champ__controle input {
+    .np-champ__controle input,
+    .np-champ__controle select {
       width: 100%;
       padding: 0.5rem 0.6rem;
       border: 1px solid var(--np-bordure, #d5dee3);

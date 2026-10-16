@@ -1,0 +1,156 @@
+:host {
+  display: block;
+}
+
+.bandeau {
+  background: linear-gradient(135deg, var(--np-couleur-principale-fonce), var(--np-couleur-principale));
+  color: #ffffff;
+  padding: 3.5rem 1.5rem 3rem;
+}
+
+.bandeau__contenu {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin: 0 0 0.5rem;
+  opacity: 0.9;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0 0 0.75rem;
+  color: #ffffff;
+}
+
+.accroche {
+  margin: 0 0 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 38rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.bandeau .np-bouton--principal {
+  background: var(--np-accent);
+  border-color: var(--np-accent);
+  color: var(--np-texte);
+}
+
+.bandeau .np-bouton--principal:hover:not(:disabled),
+.bandeau .np-bouton--principal:focus-visible {
+  background: var(--np-accent-fonce);
+  border-color: var(--np-accent-fonce);
+  color: #ffffff;
+}
+
+.bandeau .np-bouton--secondaire {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
+}
+
+.section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+h2 {
+  margin: 0 0 1.25rem;
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.carte {
+  background: var(--np-surface);
+  border: 1px solid var(--np-bordure);
+  border-radius: var(--np-rayon);
+  box-shadow: var(--np-ombre-carte);
+  padding: 1.1rem;
+}
+
+.carte h3,
+.etapes h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+.carte p,
+.etapes p,
+.precision {
+  margin: 0;
+  color: var(--np-texte-doux);
+}
+
+.etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.etapes li {
+  display: flex;
+  gap: 0.9rem;
+  background: var(--np-surface);
+  border: 1px solid var(--np-bordure);
+  border-radius: var(--np-rayon);
+  padding: 1rem;
+}
+
+.etapes__numero {
+  flex: 0 0 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--np-couleur-principale-clair);
+  color: var(--np-couleur-principale-fonce);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tableau-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--np-surface);
+}
+
+th,
+td {
+  border: 1px solid var(--np-bordure);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+}
+
+thead th {
+  background: var(--np-couleur-principale-clair);
+}
+
+.coordonnees address {
+  font-style: normal;
+  margin-bottom: 1.25rem;
+}
+
+.coordonnees p {
+  margin: 0.2rem 0;
+}

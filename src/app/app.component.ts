@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { AuthService } from './auth/services/auth.service';
+import { ROLE_LABELS } from './auth/models/utilisateur.model';
 
 @Component({
   selector: 'app-root',
@@ -10,17 +12,29 @@ import { filter } from 'rxjs';
 })
 export class AppComponent {
   readonly router = inject(Router);
+  readonly auth = inject(AuthService);
+  readonly labelsRole = ROLE_LABELS;
   title = 'Netlinge Pressing';
-  estAccueil = true;
+  pagePublique = true;
   menuOuvert = false;
 
   constructor() {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => {
-        this.estAccueil = this.router.url === '/';
+        const url = this.router.url.split('?')[0];
+        this.pagePublique = url === '/' || url === '/connexion';
         this.menuOuvert = false;
       });
+  }
+
+  get afficherNavigation(): boolean {
+    return this.auth.estConnecte();
+  }
+
+  libelleRole(): string {
+    const utilisateur = this.auth.utilisateurCourant();
+    return utilisateur ? this.labelsRole[utilisateur.role] : '';
   }
 
   basculerMenu(): void {
@@ -29,5 +43,11 @@ export class AppComponent {
 
   fermerMenu(): void {
     this.menuOuvert = false;
+  }
+
+  deconnecter(): void {
+    this.auth.deconnecter();
+    this.menuOuvert = false;
+    void this.router.navigateByUrl('/');
   }
 }

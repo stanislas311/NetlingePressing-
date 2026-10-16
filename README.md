@@ -1,59 +1,58 @@
-# NetlingePressing
+# Netlinge Pressing
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
+Application web de gestion de pressing (sujet étudiant) : dépôt de linge avec ticket, suivi de statut, facturation et notifications. Projet Angular 19 (composants standalone, CSS, sans SSR, sans backend). Toutes les données sont stockées dans le `localStorage` du navigateur : chaque machine et chaque navigateur a ses propres données.
 
-## Development server
+## Fonctionnalités
 
-To start a local development server, run:
+- Enregistrement d’un client et d’un dépôt multi-articles
+- Ticket imprimable au format `DP-AAAAMMJJ-XXXX`
+- Date de retrait prévue (préremplie à +48 h, modifiable)
+- Suivi de statut : déposé, en lavage, prêt, livré (une étape à la fois, historisé)
+- Page d’accueil publique et authentification locale (gérant / réceptionniste)
+- Gestion des comptes du personnel par le gérant
+
+## Technologies
+
+Angular 19, TypeScript, CSS (système de design Netlinge), OpenSpec (développement piloté par les spécifications), tests Jasmine/Karma.
+
+## Lancer le projet
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Ouvrir [http://localhost:4200/](http://localhost:4200/).
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Build de production :
 
 ```bash
-ng generate component component-name
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Le dossier de sortie est `dist/netlinge-pressing/browser`.
+
+Tests :
 
 ```bash
-ng generate --help
+npx ng test --watch=false --browsers=ChromeHeadless
 ```
 
-## Building
+## Identifiants de démonstration
 
-To build the project run:
+Créés automatiquement au premier lancement (mots de passe hachés SHA-256 avec sel, jamais stockés en clair) :
 
-```bash
-ng build
-```
+| Rôle | Identifiant | Mot de passe |
+| --- | --- | --- |
+| Gérant | `gerant` | `NetlingeGerant2026` |
+| Réceptionniste | `reception` | `NetlingeAccueil2026` |
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Déploiement
 
-## Running unit tests
+Le fichier `vercel.json` configure le build Angular et une réécriture vers `index.html` pour les routes. Lien prévu : https://netlinge-pressing.vercel.app (à compléter après le premier déploiement).
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Marche à suivre Vercel : New Project, import du dépôt GitHub `stanislas311/NetlingePressing-`, nom de projet `netlinge-pressing`, commande `npm run build`, dossier `dist/netlinge-pressing/browser`.
 
-```bash
-ng test
-```
+## Démarche OpenSpec
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Chaque fonctionnalité suit le cycle proposer / implémenter / archiver dans `openspec/changes/` puis fusion des exigences dans `openspec/specs/`. Les changements déjà archivés couvrent le dépôt de linge, la date de retrait, le système de design et le suivi de statut.

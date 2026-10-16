@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  max-width: 720px;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+}
+
+.intro {
+  color: var(--np-texte-doux);
+  margin: 0 0 1.5rem;
+}
+
+h2 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.succes {
+  color: var(--np-succes);
+  background: var(--np-succes-fond);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--np-rayon-petit);
+}
+
+.erreur {
+  color: var(--np-erreur);
+  margin: 0 0 0.75rem;
+}
+
+select {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--np-bordure);
+  border-radius: var(--np-rayon-petit);
+  font-family: var(--np-police-texte);
+  font-size: 1rem;
+  background: var(--np-surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid var(--np-bordure);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+}
