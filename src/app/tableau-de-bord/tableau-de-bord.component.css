@@ -1,0 +1,32 @@
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.chiffre {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: var(--np-police-titres);
+}
+
+.repartition {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.repartition li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.vide {
+  color: var(--np-texte-doux);
+  font-style: italic;
+}

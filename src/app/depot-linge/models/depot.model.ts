@@ -10,16 +10,25 @@ export interface DepotArticle {
   service: string;
 }
 
-export type DepotStatut = 'depose' | 'en-lavage' | 'pret' | 'livre';
+export type DepotStatut = 'depose' | 'en-lavage' | 'pret' | 'livre' | 'annule';
 
 export const STATUTS_ORDE: DepotStatut[] = ['depose', 'en-lavage', 'pret', 'livre'];
+
+export const STATUTS_FILTRE: DepotStatut[] = [...STATUTS_ORDE, 'annule'];
 
 export const STATUT_LABELS: Record<DepotStatut, string> = {
   depose: 'Déposé',
   'en-lavage': 'En lavage',
   pret: 'Prêt',
   livre: 'Livré',
+  annule: 'Annulé',
 };
+
+export interface Paiement {
+  montant: number;
+  date: string;
+  libelle: string;
+}
 
 export interface DepotHistoriqueStatut {
   ancien: DepotStatut | null;
@@ -39,6 +48,9 @@ export interface Depot {
   dateRetraitPrevue: string;
   dateRetraitReelle?: string;
   historiqueStatuts: DepotHistoriqueStatut[];
+  montantTotal?: number;
+  paiements?: Paiement[];
+  motifAnnulation?: string;
 }
 
 export interface DepotCreation {
@@ -46,6 +58,34 @@ export interface DepotCreation {
   clientTelephone: string;
   articles: DepotArticle[];
   dateRetrait?: string;
+  avance?: number;
+}
+
+export function totalPaye(depot: Pick<Depot, 'paiements'>): number {
+  return (depot.paiements ?? []).reduce((somme, p) => somme + p.montant, 0);
+}
+
+export function soldeRestant(depot: Pick<Depot, 'montantTotal' | 'paiements'>): number {
+  return Math.max(0, (depot.montantTotal ?? 0) - totalPaye(depot));
+}
+
+export function formaterMontant(montant: number): string {
+  return `${new Intl.NumberFormat('fr-FR').format(Math.round(montant))} F`;
+}
+
+export function telephoneWhatsApp(telephone: string): string {
+  const chiffres = telephone.replace(/\D/g, '');
+  if (chiffres.startsWith('225')) {
+    return chiffres;
+  }
+  if (chiffres.startsWith('0')) {
+    return `225${chiffres.slice(1)}`;
+  }
+  return `225${chiffres}`;
+}
+
+export function depotVerrouille(statut: DepotStatut): boolean {
+  return statut === 'livre' || statut === 'annule';
 }
 
 function pad2(valeur: number): string {

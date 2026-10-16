@@ -9,6 +9,8 @@ const COULEURS_STATUT: Record<string, string> = {
   'prêt': 'vert',
   livre: 'sombre',
   'livré': 'sombre',
+  annule: 'rouge',
+  'annulé': 'rouge',
   retard: 'rouge',
 };
 

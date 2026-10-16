@@ -1,19 +1,21 @@
 # Netlinge Pressing
 
-Application web de gestion de pressing (sujet étudiant) : dépôt de linge avec ticket, suivi de statut, facturation et notifications. Projet Angular 19 (composants standalone, CSS, sans SSR, sans backend). Toutes les données sont stockées dans le `localStorage` du navigateur : chaque machine et chaque navigateur a ses propres données.
+Application web de **gestion de pressing** (projet étudiant Angular 19, sans backend ni SSR). Données dans le `localStorage` du navigateur : chaque machine a ses propres données.
+
+Lien prévu : [https://netlinge-pressing.vercel.app](https://netlinge-pressing.vercel.app) (à confirmer après import Vercel).
 
 ## Fonctionnalités
 
-- Enregistrement d’un client et d’un dépôt multi-articles
-- Ticket imprimable au format `DP-AAAAMMJJ-XXXX`
-- Date de retrait prévue (préremplie à +48 h, modifiable)
-- Suivi de statut : déposé, en lavage, prêt, livré (une étape à la fois, historisé)
-- Page d’accueil publique et authentification locale (gérant / réceptionniste)
-- Gestion des comptes du personnel par le gérant
+- Page d’accueil publique, connexion (gérant / réceptionniste)
+- Dépôt multi-articles, ticket `DP-AAAAMMJJ-XXXX`, date de retrait modifiable
+- Suivi de statut : déposé, en lavage, prêt, livré (une étape à la fois)
+- Facturation : catalogue de tarifs, avance, solde, facture imprimable ; pas de livraison si solde restant
+- Notifications internes et bouton WhatsApp (`wa.me`, Côte d’Ivoire +225) quand le linge est prêt
+- Tableau de bord, annulation avec motif, page 404
 
 ## Technologies
 
-Angular 19, TypeScript, CSS (système de design Netlinge), OpenSpec (développement piloté par les spécifications), tests Jasmine/Karma.
+Angular 19, TypeScript, CSS (charte Netlinge), OpenSpec, Jasmine/Karma.
 
 ## Lancer le projet
 
@@ -24,35 +26,31 @@ ng serve
 
 Ouvrir [http://localhost:4200/](http://localhost:4200/).
 
-Build de production :
-
 ```bash
 npm run build
-```
-
-Le dossier de sortie est `dist/netlinge-pressing/browser`.
-
-Tests :
-
-```bash
 npx ng test --watch=false --browsers=ChromeHeadless
 ```
 
+Sortie de production : `dist/netlinge-pressing/browser`.
+
 ## Identifiants de démonstration
 
-Créés automatiquement au premier lancement (mots de passe hachés SHA-256 avec sel, jamais stockés en clair) :
+Créés au premier lancement. Mots de passe hachés (SHA-256 + sel), jamais en clair.
 
 | Rôle | Identifiant | Mot de passe |
 | --- | --- | --- |
 | Gérant | `gerant` | `NetlingeGerant2026` |
 | Réceptionniste | `reception` | `NetlingeAccueil2026` |
 
-## Déploiement
+## Déploiement Vercel (étape par étape)
 
-Le fichier `vercel.json` configure le build Angular et une réécriture vers `index.html` pour les routes. Lien prévu : https://netlinge-pressing.vercel.app (à compléter après le premier déploiement).
-
-Marche à suivre Vercel : New Project, import du dépôt GitHub `stanislas311/NetlingePressing-`, nom de projet `netlinge-pressing`, commande `npm run build`, dossier `dist/netlinge-pressing/browser`.
+1. Aller sur [https://vercel.com](https://vercel.com) et se connecter (compte GitHub).
+2. **Add New Project** puis **Import** du dépôt `https://github.com/stanislas311/NetlingePressing-.git`.
+3. Nom du projet : `netlinge-pressing` (URL du type `https://netlinge-pressing.vercel.app`).
+4. Preset Angular. Commande de build : `npm run build`. Dossier de sortie : `dist/netlinge-pressing/browser`.
+5. Le fichier `vercel.json` réécrit toutes les routes vers `index.html` (rechargement Angular).
+6. Lancer le déploiement. Les données restent locales au navigateur du visiteur.
 
 ## Démarche OpenSpec
 
-Chaque fonctionnalité suit le cycle proposer / implémenter / archiver dans `openspec/changes/` puis fusion des exigences dans `openspec/specs/`. Les changements déjà archivés couvrent le dépôt de linge, la date de retrait, le système de design et le suivi de statut.
+Chaque fonctionnalité a un changement dans `openspec/changes/` (proposal, design, tasks, specs) puis archivage dans `openspec/changes/archive/` et fusion dans `openspec/specs/`.

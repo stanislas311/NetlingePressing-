@@ -41,6 +41,7 @@
           <th scope="col">Déposé le</th>
           <th scope="col">Retrait prévu</th>
           <th scope="col">Statut</th>
+          <th scope="col">Solde</th>
           <th scope="col">Ticket</th>
         </tr>
       </thead>
@@ -80,7 +81,7 @@
                       Passer à l'étape suivante
                     </np-button>
                   }
-                  @if (depot.statut !== 'livre') {
+                  @if (peutAvancer(depot)) {
                     <np-button variant="secondaire" (click)="ouvrirEdition(depot)">
                       Modifier la date de retrait
                     </np-button>
@@ -94,6 +95,7 @@
                 [libelle]="libelleStatut(depot)"
               />
             </td>
+            <td>{{ solde(depot) }}</td>
             <td>
               <a [routerLink]="['/depots', depot.id, 'ticket']">Voir le ticket</a>
             </td>

@@ -1,0 +1,23 @@
+<h1>Catalogue des tarifs</h1>
+<p>Le gérant fixe le prix de chaque couple article / service (francs CFA).</p>
+@if (message; as ok) {
+  <p class="succes" role="status">{{ ok }}</p>
+}
+<form [formGroup]="form" (ngSubmit)="enregistrer()">
+  <div formArrayName="lignes">
+  @for (ligne of lignes.controls; track $index; let i = $index) {
+    <div class="ligne" [formGroupName]="i">
+      <np-form-field label="Article" [controlId]="'tarif-type-' + i">
+        <input [id]="'tarif-type-' + i" type="text" formControlName="type" />
+      </np-form-field>
+      <np-form-field label="Service" [controlId]="'tarif-service-' + i">
+        <input [id]="'tarif-service-' + i" type="text" formControlName="service" />
+      </np-form-field>
+      <np-form-field label="Prix" [controlId]="'tarif-prix-' + i">
+        <input [id]="'tarif-prix-' + i" type="number" min="0" step="50" formControlName="prix" />
+      </np-form-field>
+    </div>
+  }
+  </div>
+  <np-button type="submit" variant="principal">Enregistrer les tarifs</np-button>
+</form>

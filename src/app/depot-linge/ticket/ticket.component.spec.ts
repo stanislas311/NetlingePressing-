@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { TicketComponent } from './ticket.component';
 import { DepotStoreService } from '../services/depot-store.service';
-import { Depot, jourLocal } from '../models/depot.model';
+import { Depot, jourLocal, soldeRestant } from '../models/depot.model';
 
 describe('TicketComponent', () => {
   let fixture: ComponentFixture<TicketComponent>;
@@ -199,6 +199,9 @@ describe('TicketComponent', () => {
       const { composant } = await creerAvecDepot();
       composant.passerAuStatutSuivant();
       composant.passerAuStatutSuivant();
+      const store = TestBed.inject(DepotStoreService);
+      store.enregistrerPaiement(composant.depot!.id, soldeRestant(composant.depot!));
+      composant.depot = store.getDepotById(composant.depot!.id);
       composant.passerAuStatutSuivant();
       fixture.detectChanges();
       expect(composant.depot!.statut).toBe('livre');
@@ -211,6 +214,9 @@ describe('TicketComponent', () => {
       const { composant } = await creerAvecDepot();
       composant.passerAuStatutSuivant();
       composant.passerAuStatutSuivant();
+      const store = TestBed.inject(DepotStoreService);
+      store.enregistrerPaiement(composant.depot!.id, soldeRestant(composant.depot!));
+      composant.depot = store.getDepotById(composant.depot!.id);
       composant.passerAuStatutSuivant();
       fixture.detectChanges();
       const texte = (fixture.nativeElement as HTMLElement).textContent ?? '';

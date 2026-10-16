@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.facture {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.entete {
+  text-align: center;
+  border-bottom: 1px dashed var(--np-bordure);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+.numero {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: var(--np-police-titres);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+th,
+td {
+  border: 1px solid var(--np-bordure);
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+}
+
+.actions {
+  max-width: 520px;
+  margin: 1rem auto 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+}

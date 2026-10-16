@@ -12,7 +12,10 @@ import {
   DepotArticle,
   DepotStatut,
   jourLocal,
-  STATUTS_ORDE,
+  depotVerrouille,
+  formaterMontant,
+  soldeRestant,
+  STATUTS_FILTRE,
   STATUT_LABELS,
 } from '../models/depot.model';
 import { DepotStoreService } from '../services/depot-store.service';
@@ -36,7 +39,7 @@ export class DepotListComponent {
   readonly recherche = new FormControl('', { nonNullable: true });
   readonly filtreStatut = new FormControl<DepotStatut | ''>('', { nonNullable: true });
   readonly dateEdition = new FormControl('', { nonNullable: true });
-  readonly statutsDisponibles = STATUTS_ORDE;
+  readonly statutsDisponibles = STATUTS_FILTRE;
   readonly labelsStatuts = STATUT_LABELS;
   depots: Depot[] = [];
   depotEnEdition: string | null = null;
@@ -58,11 +61,19 @@ export class DepotListComponent {
   }
 
   peutAvancer(depot: Depot): boolean {
-    return depot.statut !== 'livre';
+    return !depotVerrouille(depot.statut);
+  }
+
+  solde(depot: Depot): string {
+    return formaterMontant(soldeRestant(depot));
   }
 
   passerAuStatutSuivant(depot: Depot): void {
-    this.store.passerAuStatutSuivant(depot.id);
+    const resultat = this.store.passerAuStatutSuivant(depot.id);
+    if (!resultat) {
+      this.erreurEdition =
+        'Le dépôt ne peut pas être livré tant que le solde n’est pas soldé.';
+    }
     this.depots = this.store.rechercherDepots(
       this.recherche.value,
       this.filtreStatut.value || undefined

@@ -12,8 +12,9 @@ import { Router, RouterLink } from '@angular/router';
 import { NpButtonComponent } from '../../systeme-design/np-button/np-button.component';
 import { NpCardComponent } from '../../systeme-design/np-card/np-card.component';
 import { NpFormFieldComponent } from '../../systeme-design/np-form-field/np-form-field.component';
-import { dateRetraitValide, jourLocal } from '../models/depot.model';
+import { dateRetraitValide, formaterMontant, jourLocal } from '../models/depot.model';
 import { DELAI_RETRAIT_HEURES, DepotStoreService } from '../services/depot-store.service';
+import { SERVICES_CATALOGUE, TarifService, TYPES_ARTICLES } from '../../facturation/services/tarif.service';
 
 export function telephoneValidator(control: AbstractControl): ValidationErrors | null {
   const valeur: string = control.value ?? '';
@@ -47,7 +48,10 @@ export function dateRetraitValidator(control: AbstractControl): ValidationErrors
 export class DepotCreateComponent {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(DepotStoreService);
+  private readonly tarifs = inject(TarifService);
   private readonly router = inject(Router);
+  readonly types = TYPES_ARTICLES;
+  readonly services = SERVICES_CATALOGUE;
 
   soumis = false;
   messageConfirmation: string | null = null;
@@ -62,6 +66,7 @@ export class DepotCreateComponent {
       [Validators.required, dateRetraitValidator],
     ],
     articles: this.fb.array([this.creerArticle()]),
+    avance: [0, [Validators.min(0)]],
   });
 
   get articles(): FormArray {
@@ -147,18 +152,29 @@ export class DepotCreateComponent {
       return;
     }
     const client = this.form.get('client')!.value;
+    const articles = articlesValides.map((g) => ({
+      type: String(g.value.type).trim(),
+      quantite: Number(g.value.quantite),
+      service: String(g.value.service).trim(),
+    }));
+    const avance = Number(this.form.get('avance')!.value) || 0;
     const depot = this.store.creerDepot({
       clientNom: client.nom.trim(),
       clientTelephone: client.telephone.trim(),
       dateRetrait: this.form.get('dateRetrait')!.value,
-      articles: articlesValides.map((g) => ({
-        type: String(g.value.type).trim(),
-        quantite: Number(g.value.quantite),
-        service: String(g.value.service).trim(),
-      })),
+      articles,
+      ...(avance > 0 ? { avance } : {}),
     });
     this.messageConfirmation = `Dépôt enregistré avec le ticket ${depot.ticketNumero}.`;
     this.router.navigate(['/depots', depot.id, 'ticket']);
+  }
+
+  apercuTotal(): string {
+    const total = this.articlesValides.reduce((somme, g) => {
+      const qte = Number(g.value.quantite) || 0;
+      return somme + this.tarifs.prix(String(g.value.type), String(g.value.service)) * qte;
+    }, 0);
+    return formaterMontant(total);
   }
 
   private creerArticle(): FormGroup {

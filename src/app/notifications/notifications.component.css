@@ -1,0 +1,29 @@
+.vide {
+  color: var(--np-texte-doux);
+  font-style: italic;
+}
+
+.liste {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.liste li {
+  background: var(--np-surface);
+  border: 1px solid var(--np-bordure);
+  border-radius: var(--np-rayon);
+  padding: 0.9rem 1rem;
+}
+
+.titre {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.date {
+  color: var(--np-texte-doux);
+  font-size: 0.9rem;
+}

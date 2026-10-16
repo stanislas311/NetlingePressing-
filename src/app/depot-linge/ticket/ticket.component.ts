@@ -9,11 +9,17 @@ import { NpTableComponent } from '../../systeme-design/np-table/np-table.compone
 import {
   dateRetraitEnIso,
   Depot,
-  STATUT_LABELS,
+  depotVerrouille,
   DepotStatut,
+  formaterMontant,
   jourLocal,
+  soldeRestant,
+  STATUT_LABELS,
+  telephoneWhatsApp,
+  totalPaye,
 } from '../models/depot.model';
 import { DepotStoreService } from '../services/depot-store.service';
+import { TarifService } from '../../facturation/services/tarif.service';
 
 const formateurDate = new Intl.DateTimeFormat('fr-FR', {
   day: '2-digit',
@@ -40,11 +46,16 @@ const formateurDate = new Intl.DateTimeFormat('fr-FR', {
 export class TicketComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly store = inject(DepotStoreService);
+  private readonly tarifs = inject(TarifService);
 
   depot: Depot | undefined;
   readonly dateEdition = new FormControl('', { nonNullable: true });
+  readonly montantPaiement = new FormControl(0, { nonNullable: true });
+  readonly motifAnnulation = new FormControl('', { nonNullable: true });
   editionOuverte = false;
   erreurEdition: string | null = null;
+  erreurAction: string | null = null;
+  messageAction: string | null = null;
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
@@ -59,16 +70,81 @@ export class TicketComponent {
     return STATUT_LABELS[statut];
   }
 
+  montant(valeur: number): string {
+    return formaterMontant(valeur);
+  }
+
+  prixLigne(type: string, service: string, quantite: number): string {
+    return formaterMontant(this.tarifs.prix(type, service) * quantite);
+  }
+
+  total(): string {
+    return formaterMontant(this.depot?.montantTotal ?? 0);
+  }
+
+  paye(): string {
+    return this.depot ? formaterMontant(totalPaye(this.depot)) : formaterMontant(0);
+  }
+
+  solde(): string {
+    return this.depot ? formaterMontant(soldeRestant(this.depot)) : formaterMontant(0);
+  }
+
   peutAvancer(): boolean {
-    return !!this.depot && this.depot.statut !== 'livre';
+    return !!this.depot && !depotVerrouille(this.depot.statut);
+  }
+
+  lienWhatsApp(): string | null {
+    if (!this.depot || this.depot.statut !== 'pret') {
+      return null;
+    }
+    const numero = telephoneWhatsApp(this.depot.clientTelephone);
+    const texte = encodeURIComponent(
+      `Bonjour ${this.depot.clientNom}, votre linge (ticket ${this.depot.ticketNumero}) est pret a Netlinge Pressing. Vous pouvez venir le retirer.`
+    );
+    return `https://wa.me/${numero}?text=${texte}`;
   }
 
   passerAuStatutSuivant(): void {
     if (!this.depot) {
       return;
     }
-    this.store.passerAuStatutSuivant(this.depot.id);
+    this.erreurAction = null;
+    const resultat = this.store.passerAuStatutSuivant(this.depot.id);
     this.depot = this.store.getDepotById(this.depot.id);
+    if (!resultat) {
+      this.erreurAction =
+        'Impossible d’avancer : le solde doit être intégralement payé avant la livraison.';
+    }
+  }
+
+  encaisser(): void {
+    if (!this.depot) {
+      return;
+    }
+    this.erreurAction = null;
+    const montant = Number(this.montantPaiement.value);
+    const resultat = this.store.enregistrerPaiement(this.depot.id, montant);
+    if (!resultat) {
+      this.erreurAction = 'Paiement refusé. Saisissez un montant positif inférieur ou égal au solde.';
+      return;
+    }
+    this.depot = resultat;
+    this.montantPaiement.setValue(0);
+    this.messageAction = 'Paiement enregistré.';
+  }
+
+  confirmerAnnulation(): void {
+    if (!this.depot) {
+      return;
+    }
+    this.erreurAction = null;
+    const resultat = this.store.annulerDepot(this.depot.id, this.motifAnnulation.value);
+    if (!resultat) {
+      this.erreurAction = 'L’annulation exige un motif et n’est possible que si le dépôt n’est ni livré ni déjà annulé.';
+      return;
+    }
+    this.depot = resultat;
   }
 
   imprimer(): void {

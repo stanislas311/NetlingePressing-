@@ -1,0 +1,17 @@
+<h1>Notifications</h1>
+@if (liste.length === 0) {
+  <p class="vide">Aucune notification pour le moment.</p>
+} @else {
+  <ul class="liste">
+    @for (item of liste; track item.id) {
+      <li>
+        <p class="titre">{{ item.titre }}</p>
+        <p>{{ item.message }}</p>
+        <p class="date">{{ formater(item.date) }}</p>
+        @if (item.depotId) {
+          <a [routerLink]="['/depots', item.depotId, 'ticket']">Ouvrir le ticket</a>
+        }
+      </li>
+    }
+  </ul>
+}

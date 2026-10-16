@@ -1,0 +1,57 @@
+@if (depot; as d) {
+  <np-card class="ticket facture">
+    <header class="entete">
+      <h1>Facture</h1>
+      <p class="numero">{{ d.ticketNumero }}</p>
+      <p>Netlinge Pressing — Cocody, Abidjan</p>
+    </header>
+    <p><strong>Client :</strong> {{ d.clientNom }} ({{ d.clientTelephone }})</p>
+    <p><strong>Date de dépôt :</strong> {{ formater(d.dateDepot) }}</p>
+
+    <h2>Détail</h2>
+    <np-table libelle="Lignes de facture">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Article</th>
+            <th scope="col">Service</th>
+            <th scope="col">Qté</th>
+            <th scope="col">Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (article of d.articles; track $index) {
+            <tr>
+              <td>{{ article.type }}</td>
+              <td>{{ article.service }}</td>
+              <td>{{ article.quantite }}</td>
+              <td>{{ ligne(article.type, article.service, article.quantite) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </np-table>
+
+    <p><strong>Total :</strong> {{ total(d) }}</p>
+    <p><strong>Payé :</strong> {{ paye(d) }}</p>
+    <p><strong>Solde :</strong> {{ solde(d) }}</p>
+
+    <h2>Paiements</h2>
+    @if ((d.paiements ?? []).length === 0) {
+      <p>Aucun paiement.</p>
+    } @else {
+      <ul>
+        @for (p of d.paiements; track $index) {
+          <li>{{ formater(p.date) }} — {{ p.libelle }} : {{ montant(p.montant) }}</li>
+        }
+      </ul>
+    }
+  </np-card>
+  <div class="actions">
+    <np-button variant="principal" (click)="imprimer()">Imprimer la facture</np-button>
+    <a [routerLink]="['/depots', d.id, 'ticket']">Retour au ticket</a>
+  </div>
+} @else {
+  <p role="alert">Facture introuvable.</p>
+  <a routerLink="/depots">Retour à la liste</a>
+}

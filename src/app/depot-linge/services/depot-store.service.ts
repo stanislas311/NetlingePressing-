@@ -1,11 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
+import { TarifService } from '../../facturation/services/tarif.service';
+import { NotificationService } from '../../notifications/services/notification.service';
 import {
   Client,
   dateRetraitEnIso,
   dateRetraitValide,
   Depot,
   DepotCreation,
+  depotVerrouille,
   DepotStatut,
+  Paiement,
+  soldeRestant,
   STATUTS_ORDE,
 } from '../models/depot.model';
 
@@ -16,6 +21,17 @@ export const DELAI_RETRAIT_HEURES = 48;
 
 @Injectable({ providedIn: 'root' })
 export class DepotStoreService {
+  private readonly tarifs: TarifService;
+  private readonly notifications: NotificationService;
+
+  constructor(
+    @Optional() tarifs?: TarifService,
+    @Optional() notifications?: NotificationService
+  ) {
+    this.tarifs = tarifs ?? new TarifService();
+    this.notifications = notifications ?? new NotificationService();
+  }
+
   creerDepot(creation: DepotCreation): Depot {
     const maintenant = new Date();
     const client = this.enregistrerClient(creation.clientNom, creation.clientTelephone);
@@ -29,9 +45,18 @@ export class DepotStoreService {
     const dateRetraitPrevue =
       dateRetraitChoisie && dateRetraitValide(dateRetraitChoisie, dateDepotIso)
         ? dateRetraitChoisie
-        : new Date(
-            maintenant.getTime() + DELAI_RETRAIT_HEURES * 3_600_000
-          ).toISOString();
+        : new Date(maintenant.getTime() + DELAI_RETRAIT_HEURES * 3_600_000).toISOString();
+
+    const articles = creation.articles.map((a) => ({ ...a }));
+    const montantTotal = articles.reduce(
+      (somme, a) => somme + this.tarifs.prix(a.type, a.service) * a.quantite,
+      0
+    );
+    const avance = Math.max(0, Number(creation.avance) || 0);
+    const paiements: Paiement[] =
+      avance > 0
+        ? [{ montant: Math.min(avance, montantTotal), date: dateDepotIso, libelle: 'Avance à la dépose' }]
+        : [];
 
     const depot: Depot = {
       id: this.genererId(),
@@ -39,16 +64,24 @@ export class DepotStoreService {
       clientId: client.id,
       clientNom: client.nom,
       clientTelephone: client.telephone,
-      articles: creation.articles.map((a) => ({ ...a })),
+      articles,
       statut: 'depose',
       dateDepot: dateDepotIso,
       dateRetraitPrevue,
       historiqueStatuts: [{ ancien: null, nouveau: 'depose', date: dateDepotIso }],
+      montantTotal,
+      paiements,
     };
 
     const depots = this.listerDepots();
     depots.push(depot);
     this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    this.notifications.ajouter(
+      'depot',
+      'Dépôt enregistré',
+      `Ticket ${depot.ticketNumero} pour ${depot.clientNom}.`,
+      depot.id
+    );
     return depot;
   }
 
@@ -97,6 +130,9 @@ export class DepotStoreService {
       return null;
     }
     const nouveauStatut = STATUTS_ORDE[indexCourant + 1];
+    if (nouveauStatut === 'livre' && soldeRestant(depot) > 0) {
+      return null;
+    }
     const maintenant = new Date().toISOString();
     const misAJour: Depot = {
       ...depot,
@@ -111,6 +147,69 @@ export class DepotStoreService {
     }
     depots[index] = misAJour;
     this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    if (nouveauStatut === 'pret') {
+      this.notifications.ajouter(
+        'pret',
+        'Linge prêt',
+        `Le ticket ${misAJour.ticketNumero} de ${misAJour.clientNom} est prêt à retirer.`,
+        misAJour.id
+      );
+    }
+    return misAJour;
+  }
+
+  enregistrerPaiement(depotId: string, montant: number): Depot | null {
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return null;
+    }
+    const depot = depots[index];
+    if (depotVerrouille(depot.statut)) {
+      return null;
+    }
+    const restant = soldeRestant(depot);
+    if (!Number.isFinite(montant) || montant <= 0 || montant > restant) {
+      return null;
+    }
+    const misAJour: Depot = {
+      ...depot,
+      paiements: [
+        ...(depot.paiements ?? []),
+        { montant, date: new Date().toISOString(), libelle: 'Paiement' },
+      ],
+    };
+    depots[index] = misAJour;
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    return misAJour;
+  }
+
+  annulerDepot(depotId: string, motif: string): Depot | null {
+    const motifPropre = motif.trim();
+    if (!motifPropre) {
+      return null;
+    }
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return null;
+    }
+    const depot = depots[index];
+    if (depotVerrouille(depot.statut)) {
+      return null;
+    }
+    const maintenant = new Date().toISOString();
+    const misAJour: Depot = {
+      ...depot,
+      statut: 'annule',
+      motifAnnulation: motifPropre,
+      historiqueStatuts: [
+        ...depot.historiqueStatuts,
+        { ancien: depot.statut, nouveau: 'annule', date: maintenant },
+      ],
+    };
+    depots[index] = misAJour;
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
     return misAJour;
   }
 
@@ -121,7 +220,7 @@ export class DepotStoreService {
       return null;
     }
     const depot = depots[index];
-    if (depot.statut === 'livre') {
+    if (depotVerrouille(depot.statut)) {
       return null;
     }
     if (!dateRetraitValide(nouvelleDateIso, depot.dateDepot)) {
@@ -134,14 +233,20 @@ export class DepotStoreService {
   }
 
   private normaliserDepot(depot: Depot): Depot {
-    const statutValide: DepotStatut[] = STATUTS_ORDE;
+    const statutValide: DepotStatut[] = [...STATUTS_ORDE, 'annule'];
     const statut =
       depot.statut && statutValide.includes(depot.statut) ? depot.statut : 'depose';
     const historique =
       Array.isArray(depot.historiqueStatuts) && depot.historiqueStatuts.length > 0
         ? depot.historiqueStatuts
         : [{ ancien: null, nouveau: statut, date: depot.dateDepot }];
-    return { ...depot, statut, historiqueStatuts: historique };
+    return {
+      ...depot,
+      statut,
+      historiqueStatuts: historique,
+      montantTotal: depot.montantTotal ?? 0,
+      paiements: Array.isArray(depot.paiements) ? depot.paiements : [],
+    };
   }
 
   private enregistrerClient(nom: string, telephone: string): Client {

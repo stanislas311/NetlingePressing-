@@ -182,3 +182,10 @@ Le système SHALL lire les dépôts déjà enregistrés dans le localStorage san
 #### Scenario: Données existantes préservées
 - **WHEN** l'application est rechargée après la mise à jour
 - **THEN** les dépôts, clients et numéros de ticket existants restent disponibles et modifiables selon leur statut
+
+### Requirement: Annulation d'un dépôt
+Le système SHALL permettre d'annuler un dépôt non livré avec un motif obligatoire, historisé.
+
+#### Scenario: Motif obligatoire
+- **WHEN** l'annulation est demandée sans motif
+- **THEN** le dépôt reste inchangé

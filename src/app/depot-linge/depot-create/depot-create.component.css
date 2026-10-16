@@ -31,6 +31,11 @@ h2 {
   font-size: 0.875rem;
 }
 
+.total {
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
 .confirmation {
   background: var(--np-succes-fond, #e3f2e5);
   border: 1px solid var(--np-succes, #1b5e20);

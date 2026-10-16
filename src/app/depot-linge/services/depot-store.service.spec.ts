@@ -5,7 +5,7 @@ import {
   CLE_DEPOTS,
   DepotStoreService,
 } from './depot-store.service';
-import { DepotCreation, STATUTS_ORDE } from '../models/depot.model';
+import { DepotCreation, soldeRestant, STATUTS_ORDE } from '../models/depot.model';
 
 describe('DepotStoreService', () => {
   let service: DepotStoreService;
@@ -230,6 +230,8 @@ describe('DepotStoreService', () => {
     it('suit le circuit complet jusqu à livré', () => {
       service.passerAuStatutSuivant(depot.id);
       service.passerAuStatutSuivant(depot.id);
+      const pret = service.getDepotById(depot.id)!;
+      service.enregistrerPaiement(depot.id, soldeRestant(pret));
       const livre = service.passerAuStatutSuivant(depot.id);
       expect(livre!.statut).toBe('livre');
       expect(livre!.dateRetraitReelle).toBeDefined();
@@ -239,6 +241,7 @@ describe('DepotStoreService', () => {
     it("enregistre la date et l'heure réelles du retrait au passage à livré", () => {
       service.passerAuStatutSuivant(depot.id);
       service.passerAuStatutSuivant(depot.id);
+      service.enregistrerPaiement(depot.id, soldeRestant(service.getDepotById(depot.id)!));
       const livre = service.passerAuStatutSuivant(depot.id);
       expect(new Date(livre!.dateRetraitReelle!).getTime()).toBeGreaterThan(0);
       expect(livre!.dateRetraitPrevue).not.toBe(livre!.dateRetraitReelle!);
@@ -247,6 +250,7 @@ describe('DepotStoreService', () => {
     it('refuse tout passage sur un dépôt livré', () => {
       service.passerAuStatutSuivant(depot.id);
       service.passerAuStatutSuivant(depot.id);
+      service.enregistrerPaiement(depot.id, soldeRestant(service.getDepotById(depot.id)!));
       service.passerAuStatutSuivant(depot.id);
       const resultat = service.passerAuStatutSuivant(depot.id);
       expect(resultat).toBeNull();
@@ -331,6 +335,7 @@ describe('DepotStoreService', () => {
       const depot = service.creerDepot(creation);
       service.passerAuStatutSuivant(depot.id);
       service.passerAuStatutSuivant(depot.id);
+      service.enregistrerPaiement(depot.id, soldeRestant(service.getDepotById(depot.id)!));
       service.passerAuStatutSuivant(depot.id);
 
       const nouvelleDate = new Date(Date.now() + 96 * 3_600_000).toISOString();
@@ -345,5 +350,28 @@ describe('DepotStoreService', () => {
 
   it("l'ordre des statuts suit le circuit imposé", () => {
     expect(STATUTS_ORDE).toEqual(['depose', 'en-lavage', 'pret', 'livre']);
+  });
+
+  it("refuse la livraison tant que le solde n'est pas payé", () => {
+    const depot = service.creerDepot(creation);
+    service.passerAuStatutSuivant(depot.id);
+    service.passerAuStatutSuivant(depot.id);
+    expect(service.passerAuStatutSuivant(depot.id)).toBeNull();
+    expect(service.getDepotById(depot.id)!.statut).toBe('pret');
+  });
+
+  it('enregistre une avance à la création', () => {
+    const depot = service.creerDepot({ ...creation, avance: 500 });
+    expect(depot.paiements!.length).toBe(1);
+    expect(depot.paiements![0].montant).toBe(500);
+    expect(soldeRestant(depot)).toBe((depot.montantTotal ?? 0) - 500);
+  });
+
+  it('annule un dépôt avec un motif', () => {
+    const depot = service.creerDepot(creation);
+    const annule = service.annulerDepot(depot.id, 'Tissu trop fragile');
+    expect(annule!.statut).toBe('annule');
+    expect(annule!.motifAnnulation).toBe('Tissu trop fragile');
+    expect(service.passerAuStatutSuivant(depot.id)).toBeNull();
   });
 });

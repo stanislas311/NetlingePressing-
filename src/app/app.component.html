@@ -61,8 +61,11 @@
       [class.np-nav--ouverte]="menuOuvert"
       aria-label="Navigation principale"
     >
+      <a routerLink="/tableau-de-bord" (click)="fermerMenu()">Tableau de bord</a>
       <a routerLink="/depots" (click)="fermerMenu()">Dépôts de linge</a>
+      <a routerLink="/notifications" (click)="fermerMenu()">Notifications</a>
       @if (auth.estGerant()) {
+        <a routerLink="/tarifs" (click)="fermerMenu()">Tarifs</a>
         <a routerLink="/personnel" (click)="fermerMenu()">Personnel</a>
       }
     </nav>

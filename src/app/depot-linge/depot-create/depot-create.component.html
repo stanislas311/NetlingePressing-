@@ -39,6 +39,11 @@
     >
       <input id="dateRetrait" type="date" formControlName="dateRetrait" />
     </np-form-field>
+
+    <p class="total">Total estimé : {{ apercuTotal() }}</p>
+    <np-form-field label="Avance versée à la dépose (F CFA)" controlId="avance">
+      <input id="avance" type="number" min="0" step="100" formControlName="avance" />
+    </np-form-field>
   </np-card>
 
   <np-card class="section" formArrayName="articles">
@@ -51,12 +56,12 @@
           [controlId]="'type-' + i"
           [erreur]="erreurArticle(i, 'type')"
         >
-          <input
-            [id]="'type-' + i"
-            type="text"
-            formControlName="type"
-            placeholder="Ex. Chemise"
-          />
+          <select [id]="'type-' + i" formControlName="type">
+            <option value="">Choisir</option>
+            @for (type of types; track type) {
+              <option [value]="type">{{ type }}</option>
+            }
+          </select>
         </np-form-field>
 
         <np-form-field
@@ -78,12 +83,12 @@
           [controlId]="'service-' + i"
           [erreur]="erreurArticle(i, 'service')"
         >
-          <input
-            [id]="'service-' + i"
-            type="text"
-            formControlName="service"
-            placeholder="Ex. Lavage, Repassage"
-          />
+          <select [id]="'service-' + i" formControlName="service">
+            <option value="">Choisir</option>
+            @for (service of services; track service) {
+              <option [value]="service">{{ service }}</option>
+            }
+          </select>
         </np-form-field>
 
         <np-button

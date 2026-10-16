@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { DepotListComponent } from './depot-list.component';
 import { DepotStoreService } from '../services/depot-store.service';
-import { jourLocal } from '../models/depot.model';
+import { jourLocal, soldeRestant } from '../models/depot.model';
 
 describe('DepotListComponent', () => {
   let fixture: ComponentFixture<DepotListComponent>;
@@ -194,7 +194,7 @@ describe('DepotListComponent', () => {
         '#filtre-statut'
       ) as HTMLSelectElement;
       expect(select).not.toBeNull();
-      expect(select.options.length).toBe(5);
+      expect(select.options.length).toBe(6);
     });
 
     it('filtre les dépôts par statut sélectionné', () => {
@@ -240,6 +240,7 @@ describe('DepotListComponent', () => {
       const depot = store.listerDepots()[0];
       store.passerAuStatutSuivant(depot.id);
       store.passerAuStatutSuivant(depot.id);
+      store.enregistrerPaiement(depot.id, soldeRestant(store.getDepotById(depot.id)!));
       store.passerAuStatutSuivant(depot.id);
       component.recherche.setValue(depot.ticketNumero);
       fixture.detectChanges();

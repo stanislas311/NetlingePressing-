@@ -30,7 +30,23 @@
         <dt>Client</dt>
         <dd>{{ d.clientNom }} ({{ d.clientTelephone }})</dd>
       </div>
+      <div>
+        <dt>Total</dt>
+        <dd>{{ total() }}</dd>
+      </div>
+      <div>
+        <dt>Payé</dt>
+        <dd>{{ paye() }}</dd>
+      </div>
+      <div>
+        <dt>Solde</dt>
+        <dd>{{ solde() }}</dd>
+      </div>
     </dl>
+
+    @if (d.motifAnnulation) {
+      <p class="erreur" role="status">Annulé : {{ d.motifAnnulation }}</p>
+    }
 
     <h3>Articles déposés</h3>
     <np-table libelle="Articles du dépôt">
@@ -40,6 +56,7 @@
             <th scope="col">Type d'article</th>
             <th scope="col">Quantité</th>
             <th scope="col">Service demandé</th>
+            <th scope="col">Montant</th>
           </tr>
         </thead>
         <tbody>
@@ -48,11 +65,38 @@
               <td>{{ article.type }}</td>
               <td>{{ article.quantite }}</td>
               <td>{{ article.service }}</td>
+              <td>{{ prixLigne(article.type, article.service, article.quantite) }}</td>
             </tr>
           }
         </tbody>
       </table>
     </np-table>
+
+    <h3>Paiements</h3>
+    @if ((d.paiements ?? []).length === 0) {
+      <p>Aucun paiement enregistré.</p>
+    } @else {
+      <np-table libelle="Historique des paiements">
+        <table class="historique">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Libellé</th>
+              <th scope="col">Montant</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (paiement of d.paiements; track $index) {
+              <tr>
+                <td>{{ formaterDate(paiement.date) }}</td>
+                <td>{{ paiement.libelle }}</td>
+                <td>{{ montant(paiement.montant) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </np-table>
+    }
 
     <h3>Historique des statuts</h3>
     <np-table libelle="Historique des statuts du dépôt">
@@ -89,10 +133,33 @@
   </np-card>
 
   <div class="modification">
+    @if (erreurAction; as message) {
+      <p class="erreur" role="alert">{{ message }}</p>
+    }
+    @if (messageAction; as ok) {
+      <p class="confirmation" role="status">{{ ok }}</p>
+    }
     @if (peutAvancer()) {
       <np-button variant="principal" (click)="passerAuStatutSuivant()">
         Passer à l'étape suivante
       </np-button>
+      <div class="edition">
+        <np-form-field label="Encaisser un montant (F CFA)" controlId="paiement">
+          <input id="paiement" type="number" min="1" step="100" [formControl]="montantPaiement" />
+        </np-form-field>
+        <np-button variant="secondaire" (click)="encaisser()">Enregistrer le paiement</np-button>
+      </div>
+      <div class="edition">
+        <np-form-field label="Motif d'annulation" controlId="motif-annulation">
+          <input id="motif-annulation" type="text" [formControl]="motifAnnulation" />
+        </np-form-field>
+        <np-button variant="danger" (click)="confirmerAnnulation()">Annuler le dépôt</np-button>
+      </div>
+    }
+    @if (lienWhatsApp(); as lien) {
+      <a class="np-bouton np-bouton--principal" [href]="lien" target="_blank" rel="noopener noreferrer">
+        Prévenir le client sur WhatsApp
+      </a>
     }
     @if (editionOuverte) {
       <div class="edition">
@@ -113,7 +180,7 @@
       @if (erreurEdition; as message) {
         <p class="erreur" role="alert">{{ message }}</p>
       }
-    } @else if (depot.statut !== 'livre') {
+    } @else if (peutAvancer()) {
       <np-button variant="secondaire" (click)="ouvrirEdition()">
         Modifier la date de retrait
       </np-button>
@@ -122,6 +189,7 @@
 
   <div class="actions">
     <np-button variant="principal" (click)="imprimer()">Imprimer</np-button>
+    <a [routerLink]="['/depots', d.id, 'facture']">Voir la facture</a>
     <a routerLink="/depots">Retour à la liste</a>
   </div>
 } @else {

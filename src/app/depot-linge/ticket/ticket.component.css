@@ -101,6 +101,11 @@ h3 {
   font-size: 0.875rem;
 }
 
+.confirmation {
+  color: var(--np-succes, #1b5e20);
+  margin: 0.5rem 0 0;
+}
+
 .introuvable {
   color: var(--np-erreur, #b3261e);
   font-weight: 600;

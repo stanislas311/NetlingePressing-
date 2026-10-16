@@ -180,7 +180,8 @@ a {
     padding: 0 !important;
   }
 
-  np-card.ticket {
+  np-card.ticket,
+  np-card.facture {
     border: none !important;
     box-shadow: none !important;
     max-width: none !important;
