@@ -1,6 +1,12 @@
 <section class="bandeau">
-  <div class="bandeau__contenu">
-    <p class="eyebrow">Pressing à Abidjan</p>
+  <div class="bandeau__contenu np-anime-slide">
+    <div class="badge-localisation">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+      <span class="eyebrow">Pressing d'excellence à Abidjan</span>
+    </div>
     <h1>Netlinge Pressing</h1>
     <p class="accroche">
       Dépôt de linge, suivi de statut, ticket imprimable et retrait en toute
@@ -8,36 +14,79 @@
       maison.
     </p>
     <div class="actions">
-      <a routerLink="/connexion" class="np-bouton np-bouton--principal">Connexion</a>
-      <a href="#services" class="np-bouton np-bouton--secondaire">Découvrir les services</a>
+      <a routerLink="/connexion" class="np-bouton np-bouton--principal np-bouton--lg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+          <polyline points="10 17 15 12 10 7"></polyline>
+          <line x1="15" y1="12" x2="3" y2="12"></line>
+        </svg>
+        Connexion
+      </a>
+      <a href="#services" class="np-bouton np-bouton--secondaire np-bouton--lg">Découvrir les services</a>
     </div>
   </div>
 </section>
 
 <section id="services" class="section">
-  <h2>Nos services</h2>
+  <div class="section-titre-centre">
+    <span class="section-sous-titre">Savoir-faire artisanal & technologie</span>
+    <h2>Nos services</h2>
+  </div>
   <div class="grille">
     <article class="carte">
+      <div class="carte-icone" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+          <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+          <path d="M16 16h5v5"></path>
+        </svg>
+      </div>
       <h3>Lavage</h3>
       <p>Lavage soigné du quotidien et des pièces délicates, avec un suivi du statut jusqu'au retrait.</p>
     </article>
+
     <article class="carte">
+      <div class="carte-icone" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m14 18 4-4-4-4"></path>
+          <path d="m6 18 4-4-4-4"></path>
+        </svg>
+      </div>
       <h3>Repassage</h3>
       <p>Repassage professionnel pour chemises, pantalons et tenues de cérémonie.</p>
     </article>
+
     <article class="carte">
+      <div class="carte-icone" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20"></path>
+          <path d="m17 5-10 14"></path>
+          <path d="m7 5 10 14"></path>
+        </svg>
+      </div>
       <h3>Nettoyage à sec</h3>
       <p>Traitement adapté aux tissus qui ne supportent pas le lavage classique.</p>
     </article>
+
     <article class="carte">
+      <div class="carte-icone" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </div>
       <h3>Linge de maison</h3>
       <p>Draps, nappes et serviettes pris en charge avec la même exigence de traçabilité.</p>
     </article>
   </div>
 </section>
 
-<section class="section">
-  <h2>Comment ça se passe</h2>
+<section class="section section--etapes">
+  <div class="section-titre-centre">
+    <span class="section-sous-titre">Processus simplifié</span>
+    <h2>Comment ça se passe</h2>
+  </div>
   <ol class="etapes">
     <li>
       <span class="etapes__numero">1</span>
@@ -71,8 +120,11 @@
 </section>
 
 <section class="section">
-  <h2>Tarifs indicatifs</h2>
-  <p class="precision">Prix de référence en francs CFA. Le tarif exact est confirmé au dépôt.</p>
+  <div class="section-titre-centre">
+    <span class="section-sous-titre">Grille tarifaire claire</span>
+    <h2>Tarifs indicatifs</h2>
+    <p class="precision">Prix de référence en francs CFA. Le tarif exact est confirmé au dépôt.</p>
+  </div>
   <div class="tableau-wrap">
     <table>
       <thead>
@@ -114,12 +166,16 @@
 </section>
 
 <section class="section coordonnees">
-  <h2>Nous trouver</h2>
-  <address>
-    <p>Netlinge Pressing</p>
-    <p>Cocody, Abidjan — Côte d'Ivoire</p>
-    <p>Téléphone : +225 07 00 00 00 00</p>
-    <p>Ouvert du lundi au samedi, 8 h – 19 h</p>
-  </address>
-  <a routerLink="/connexion" class="np-bouton np-bouton--principal">Espace personnel — Connexion</a>
+  <div class="carte-coordonnees">
+    <h2>Nous trouver</h2>
+    <address>
+      <p class="nom-pressing">Netlinge Pressing</p>
+      <p>Cocody, Abidjan — Côte d'Ivoire</p>
+      <p>Téléphone : +225 07 00 00 00 00</p>
+      <p>Ouvert du lundi au samedi, 8 h – 19 h</p>
+    </address>
+    <div class="action-contact">
+      <a routerLink="/connexion" class="np-bouton np-bouton--principal">Espace personnel — Connexion</a>
+    </div>
+  </div>
 </section>

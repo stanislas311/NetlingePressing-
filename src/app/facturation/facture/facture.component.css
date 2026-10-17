@@ -1,49 +1,248 @@
 :host {
   display: block;
-  padding: 1rem;
-}
-
-.facture {
-  max-width: 520px;
+  max-width: 680px;
   margin: 0 auto;
 }
 
+.facture-page-entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.retour-lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--np-texte-doux);
+  text-decoration: none;
+}
+
+.retour-lien:hover {
+  color: var(--np-couleur-principale);
+}
+
+.facture {
+  background: var(--np-surface);
+  border: 1px solid var(--np-bordure);
+  border-radius: var(--np-rayon-grand);
+  box-shadow: var(--np-ombre-carte);
+  padding: 2.5rem;
+}
+
 .entete {
-  text-align: center;
-  border-bottom: 1px dashed var(--np-bordure);
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid var(--np-bordure);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  gap: 1.5rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--np-couleur-principale);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.entete h1 {
+  font-size: 1.75rem;
+  margin: 0;
+  color: var(--np-texte);
 }
 
 .numero {
-  font-size: 1.3rem;
+  font-family: var(--np-police-mono);
+  font-size: 1.15rem;
   font-weight: 700;
-  font-family: var(--np-police-titres);
+  color: var(--np-texte-doux);
+  margin: 0.25rem 0 0.5rem;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
+.pressing-coordonnees {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--np-texte-doux);
 }
 
-th,
-td {
+.tampon-solde {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  font-family: var(--np-police-mono);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border-radius: var(--np-rayon-petit);
+  border: 2px dashed;
+  text-align: center;
+  transform: rotate(-3deg);
+  white-space: nowrap;
+}
+
+.tampon-solde--acquittee {
+  border-color: var(--np-succes);
+  color: var(--np-succes);
+  background: var(--np-succes-fond);
+}
+
+.tampon-solde--attente {
+  border-color: #c2410c;
+  color: #c2410c;
+  background: #fff7ed;
+}
+
+.client-bloc {
+  background: #f8fafc;
   border: 1px solid var(--np-bordure);
-  padding: 0.4rem 0.5rem;
-  text-align: left;
+  border-radius: var(--np-rayon);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.client-bloc p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 1.75rem 0 0.75rem;
+  color: var(--np-texte);
+}
+
+.recapitulatif-facture {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+  border-radius: var(--np-rayon);
+  border: 1px solid var(--np-bordure);
+  max-width: 300px;
+  margin-left: auto;
+}
+
+.ligne-recap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.ligne-recap--solde {
+  border-top: 1px dashed var(--np-bordure-forte);
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.valeur-total {
+  font-weight: 700;
+}
+
+.valeur-paye {
+  color: var(--np-succes);
+  font-weight: 600;
+}
+
+.valeur-solde-zero {
+  color: var(--np-succes);
+  font-weight: 700;
+}
+
+.valeur-solde-du {
+  color: #c2410c;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.liste-paiements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.liste-paiements li {
+  padding: 0.5rem 0.75rem;
+  background: #f8fafc;
+  border: 1px solid var(--np-bordure);
+  border-radius: var(--np-rayon-petit);
+  font-size: 0.875rem;
+}
+
+.texte-vide {
+  color: var(--np-texte-doux);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.zone-signatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--np-bordure);
+}
+
+.signature-box {
+  border-bottom: 1px solid var(--np-bordure-forte);
+  padding-bottom: 3.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--np-texte-doux);
+}
+
+.pied-facture {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--np-texte-discret);
 }
 
 .actions {
-  max-width: 520px;
-  margin: 1rem auto 0;
   display: flex;
-  gap: 1rem;
   align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.actions a {
+  color: var(--np-couleur-principale);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.actions a:hover {
+  text-decoration: underline;
 }
 
 @media print {
+  :host {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .facture-page-entete,
   .actions {
-    display: none;
+    display: none !important;
+  }
+
+  .facture {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
   }
 }

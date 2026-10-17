@@ -1,21 +1,65 @@
 <div class="entete">
-  <h2>Dépôts de linge</h2>
-  <a routerLink="/depots/nouveau" class="np-bouton np-bouton--principal"
-    >Nouveau dépôt</a
-  >
+  <div>
+    <h2>{{ vueArchives ? 'Dépôts archivés' : 'Dépôts de linge' }}</h2>
+    <p class="sous-titre">
+      {{ vueArchives ? 'Consultez ou restaurez les dépôts placés en archive.' : 'Suivez l’état d’avancement des dépôts, les dates de retrait et les règlements.' }}
+    </p>
+  </div>
+  <div class="entete-actions">
+    @if (vueArchives) {
+      <button type="button" class="np-bouton np-bouton--secondaire" (click)="basculerVueArchives()">
+        ← Retour aux dépôts actifs
+      </button>
+    }
+    <a routerLink="/depots/nouveau" class="np-bouton np-bouton--principal">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Nouveau dépôt
+    </a>
+  </div>
 </div>
+
+@if (messageSucces; as message) {
+  <div class="np-alerte np-alerte--succes np-anime-slide" role="status">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>{{ message }}</span>
+  </div>
+}
+
+@if (erreurLivraison; as msg) {
+  <div class="np-alerte np-alerte--avertissement np-anime-slide" role="alert">
+    <div class="np-alerte__icone">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <div class="np-alerte__corps">
+      <strong>Livraison impossible : solde restant à régler</strong>
+      <p>{{ msg }}</p>
+    </div>
+  </div>
+}
 
 <div class="filtres">
   <np-form-field
     label="Rechercher par numéro de ticket ou par nom de client"
     controlId="recherche"
   >
-    <input
-      id="recherche"
-      type="search"
-      [formControl]="recherche"
-      placeholder="Ex. DP-2026 ou Awa"
-    />
+    <div class="champ-recherche">
+      <input
+        id="recherche"
+        type="search"
+        [formControl]="recherche"
+        placeholder="Ex. DP-2026 ou Awa"
+      />
+    </div>
   </np-form-field>
 
   <np-form-field label="Filtrer par statut" controlId="filtre-statut">
@@ -28,8 +72,37 @@
   </np-form-field>
 </div>
 
+<!-- Boîte archive style WhatsApp : discrète et placée juste au-dessus des lignes -->
+<div
+  class="boite-archive"
+  [class.boite-archive--active]="vueArchives"
+  (click)="basculerVueArchives()"
+  role="button"
+  tabindex="0"
+  title="Afficher les dépôts archivés"
+>
+  <div class="boite-archive__gauche">
+    <svg class="boite-archive__icone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="21 8 21 21 3 21 3 8"></polyline>
+      <rect width="22" height="5" x="1" y="3"></rect>
+      <line x1="10" y1="12" x2="14" y2="12"></line>
+    </svg>
+    <span class="boite-archive__texte">
+      {{ vueArchives ? 'Dépôts archivés (cliquer pour revenir aux dépôts actifs)' : 'Archivés' }}
+    </span>
+  </div>
+  <div class="boite-archive__droite">
+    <span class="boite-archive__compteur">{{ nombreArchives }}</span>
+    <span class="boite-archive__fleche" aria-hidden="true">{{ vueArchives ? '▲' : '›' }}</span>
+  </div>
+</div>
+
 @if (depots.length === 0) {
-  <p class="vide" role="status">Aucun dépôt trouvé.</p>
+  <div class="vide-conteneur np-anime-fade">
+    <p class="vide" role="status">
+      {{ vueArchives ? 'Aucun dépôt archivé.' : 'Aucun dépôt trouvé.' }}
+    </p>
+  </div>
 } @else {
   <np-table libelle="Liste des dépôts de linge">
     <table class="liste">
@@ -43,61 +116,161 @@
           <th scope="col">Statut</th>
           <th scope="col">Solde</th>
           <th scope="col">Ticket</th>
+          <th scope="col" class="th-gestion">Gestion</th>
         </tr>
       </thead>
       <tbody>
         @for (depot of depots; track depot.id) {
-          <tr>
-            <td>{{ depot.ticketNumero }}</td>
-            <td>{{ depot.clientNom }}</td>
-            <td>{{ formaterArticles(depot.articles) }}</td>
-            <td>{{ formaterDate(depot.dateDepot) }}</td>
-            <td>
+          <tr [class.ligne-pret]="depot.statut === 'pret'" [class.ligne-archive]="depot.archive">
+            <td class="col-ticket">
+              <span class="badge-ticket">{{ depot.ticketNumero }}</span>
+            </td>
+            <td class="col-client">
+              <span class="nom-client">{{ depot.clientNom }}</span>
+              <span class="tel-client">{{ depot.clientTelephone }}</span>
+            </td>
+            <td class="col-articles">
+              <span class="articles-texte">{{ formaterArticles(depot.articles) }}</span>
+            </td>
+            <td class="col-date">{{ formaterDate(depot.dateDepot) }}</td>
+            <td class="col-retrait">
               @if (depotEnEdition === depot.id) {
-                <div class="edition">
+                <div class="edition np-anime-fade">
                   <input
                     type="date"
                     [formControl]="dateEdition"
                     [attr.aria-label]="'Nouvelle date de retrait pour ' + depot.ticketNumero"
                   />
-                  <np-button variant="principal" (click)="confirmerEdition(depot)">
-                    Confirmer
-                  </np-button>
-                  <np-button variant="secondaire" (click)="annulerEdition()">
-                    Annuler
-                  </np-button>
+                  <div class="edition-boutons">
+                    <np-button variant="principal" (click)="confirmerEdition(depot)">
+                      Confirmer
+                    </np-button>
+                    <np-button variant="secondaire" (click)="annulerEdition()">
+                      Annuler
+                    </np-button>
+                  </div>
                 </div>
                 @if (erreurEdition; as message) {
                   <p class="erreur" role="alert">{{ message }}</p>
                 }
               } @else {
-                <span>{{ formaterDate(depot.dateRetraitPrevue) }}</span>
-                <div class="ligne-action">
-                  @if (peutAvancer(depot)) {
-                    <np-button
-                      variant="principal"
-                      (click)="passerAuStatutSuivant(depot)"
-                    >
-                      Passer à l'étape suivante
-                    </np-button>
-                  }
-                  @if (peutAvancer(depot)) {
-                    <np-button variant="secondaire" (click)="ouvrirEdition(depot)">
-                      Modifier la date de retrait
-                    </np-button>
-                  }
+                <div class="retrait-cellule">
+                  <span class="date-retrait">{{ formaterDate(depot.dateRetraitPrevue) }}</span>
+                  <div class="ligne-action">
+                    @if (peutAvancer(depot)) {
+                      <np-button
+                        variant="principal"
+                        (click)="passerAuStatutSuivant(depot)"
+                      >
+                        Passer à l'étape suivante
+                      </np-button>
+                    }
+                    @if (peutAvancer(depot)) {
+                      <np-button variant="secondaire" (click)="ouvrirEdition(depot)">
+                        Modifier la date de retrait
+                      </np-button>
+                    }
+                  </div>
                 </div>
               }
             </td>
-            <td>
+            <td class="col-statut">
               <np-status-badge
                 [statut]="depot.statut"
                 [libelle]="libelleStatut(depot)"
               />
             </td>
-            <td>{{ solde(depot) }}</td>
-            <td>
-              <a [routerLink]="['/depots', depot.id, 'ticket']">Voir le ticket</a>
+            <td class="col-solde">
+              <div class="solde-cellule">
+                <span
+                  class="np-pastille-solde"
+                  [class.np-pastille-solde--regle]="estSolde(depot)"
+                  [class.np-pastille-solde--du]="!estSolde(depot)"
+                >
+                  {{ solde(depot) }}
+                </span>
+                @if (!estSolde(depot) && peutAvancer(depot)) {
+                  @if (depotEnPaiement === depot.id) {
+                    <div class="paiement-rapide np-anime-fade">
+                      <input
+                        type="number"
+                        min="100"
+                        step="100"
+                        [max]="soldeRestantValeur(depot)"
+                        [formControl]="montantPaiementRapide"
+                        class="champ-encaissement"
+                      />
+                      <div class="paiement-rapide-actions">
+                        <np-button variant="succes" (click)="confirmerPaiement(depot)">
+                          Encaisser
+                        </np-button>
+                        <np-button variant="secondaire" (click)="annulerPaiement()">
+                          ✕
+                        </np-button>
+                      </div>
+                    </div>
+                  } @else {
+                    <button
+                      type="button"
+                      class="bouton-solder-lien"
+                      (click)="ouvrirPaiement(depot)"
+                      title="Encaisser un paiement"
+                    >
+                      Encaisser
+                    </button>
+                  }
+                }
+              </div>
+            </td>
+            <td class="col-lien">
+              <a [routerLink]="['/depots', depot.id, 'ticket']" class="lien-ticket">
+                Voir le ticket
+              </a>
+            </td>
+            <td class="col-gestion">
+              <div class="boutons-gestion">
+                @if (!depot.archive) {
+                  <button
+                    type="button"
+                    class="btn-icone-gestion btn-archiver"
+                    (click)="archiverDepot(depot)"
+                    title="Archiver ce dépôt"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                      <rect width="22" height="5" x="1" y="3"></rect>
+                      <line x1="10" y1="12" x2="14" y2="12"></line>
+                    </svg>
+                    Archiver
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn-icone-gestion btn-desarchiver"
+                    (click)="desarchiverDepot(depot)"
+                    title="Désarchiver (restaurer)"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="3 16 3 3 21 3 21 16"></polyline>
+                      <rect width="22" height="5" x="1" y="16"></rect>
+                      <line x1="10" y1="12" x2="14" y2="12"></line>
+                    </svg>
+                    Désarchiver
+                  </button>
+                }
+                <button
+                  type="button"
+                  class="btn-icone-gestion btn-supprimer"
+                  (click)="supprimerDepot(depot)"
+                  title="Supprimer définitivement ce dépôt"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  Supprimer
+                </button>
+              </div>
             </td>
           </tr>
         }

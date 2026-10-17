@@ -5,6 +5,7 @@ import { NpButtonComponent } from '../../systeme-design/np-button/np-button.comp
 import { NpCardComponent } from '../../systeme-design/np-card/np-card.component';
 import { NpFormFieldComponent } from '../../systeme-design/np-form-field/np-form-field.component';
 import { AuthService } from '../services/auth.service';
+import { COMPTES_DEMO } from '../models/utilisateur.model';
 
 @Component({
   selector: 'app-connexion',
@@ -23,6 +24,21 @@ export class ConnexionComponent {
     identifiant: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     motDePasse: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
+
+  remplirDemo(role: 'gerant' | 'reception'): void {
+    if (role === 'gerant') {
+      this.formulaire.setValue({
+        identifiant: COMPTES_DEMO.gerant.identifiant,
+        motDePasse: COMPTES_DEMO.gerant.motDePasse,
+      });
+    } else {
+      this.formulaire.setValue({
+        identifiant: COMPTES_DEMO.receptionniste.identifiant,
+        motDePasse: COMPTES_DEMO.receptionniste.motDePasse,
+      });
+    }
+    this.erreur = null;
+  }
 
   async soumettre(): Promise<void> {
     this.erreur = null;

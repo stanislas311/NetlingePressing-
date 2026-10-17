@@ -1,33 +1,68 @@
-<np-card class="connexion">
-  <h1>Connexion</h1>
-  <p class="intro">Accédez à l'espace de gestion de Netlinge Pressing.</p>
+<div class="connexion-enveloppe np-anime-slide">
+  <np-card class="connexion">
+    <div class="connexion-marque">
+      <div class="connexion-logo" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+        </svg>
+      </div>
+      <h1>Connexion</h1>
+      <p class="intro">Accédez à l'espace de gestion de Netlinge Pressing.</p>
+    </div>
 
-  <form [formGroup]="formulaire" (ngSubmit)="soumettre()">
-    <np-form-field label="Identifiant" controlId="identifiant" [erreur]="null">
-      <input
-        id="identifiant"
-        type="text"
-        autocomplete="username"
-        formControlName="identifiant"
-        [attr.aria-invalid]="formulaire.controls.identifiant.invalid && formulaire.touched"
-      />
-    </np-form-field>
+    <!-- Raccourcis de connexion pour tests / démo -->
+    <div class="demo-comptes">
+      <span class="demo-titre">Identifiants de démonstration :</span>
+      <div class="demo-boutons">
+        <button type="button" class="btn-demo" (click)="remplirDemo('gerant')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          Compte Gérant
+        </button>
+        <button type="button" class="btn-demo" (click)="remplirDemo('reception')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          Compte Réceptionniste
+        </button>
+      </div>
+    </div>
 
-    <np-form-field label="Mot de passe" controlId="mot-de-passe">
-      <input
-        id="mot-de-passe"
-        type="password"
-        autocomplete="current-password"
-        formControlName="motDePasse"
-      />
-    </np-form-field>
+    <form [formGroup]="formulaire" (ngSubmit)="soumettre()">
+      <np-form-field label="Identifiant" controlId="identifiant" [erreur]="null">
+        <input
+          id="identifiant"
+          type="text"
+          autocomplete="username"
+          formControlName="identifiant"
+          placeholder="Ex. gerant ou reception"
+          [attr.aria-invalid]="formulaire.controls.identifiant.invalid && formulaire.touched"
+        />
+      </np-form-field>
 
-    @if (erreur; as message) {
-      <p class="erreur" role="alert">{{ message }}</p>
-    }
+      <np-form-field label="Mot de passe" controlId="mot-de-passe">
+        <input
+          id="mot-de-passe"
+          type="password"
+          autocomplete="current-password"
+          formControlName="motDePasse"
+          placeholder="••••••••••••"
+        />
+      </np-form-field>
 
-    <np-button variant="principal" type="submit" [disabled]="enCours">Se connecter</np-button>
-  </form>
+      @if (erreur; as message) {
+        <div class="np-alerte-erreur np-anime-fade" role="alert">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <p class="erreur">{{ message }}</p>
+        </div>
+      }
 
-  <p class="retour"><a routerLink="/">Retour à l'accueil</a></p>
-</np-card>
+      <div class="action-connexion">
+        <np-button variant="principal" type="submit" [disabled]="enCours">Se connecter</np-button>
+      </div>
+    </form>
+
+    <p class="retour"><a routerLink="/">Retour à l'accueil</a></p>
+  </np-card>
+</div>

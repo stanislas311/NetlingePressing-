@@ -1,51 +1,78 @@
-<h1>Comptes du personnel</h1>
-<p class="intro">Le gérant crée les identifiants de l'équipe. Les mots de passe ne sont jamais affichés.</p>
+<div class="personnel-entete">
+  <h2>Comptes du personnel</h2>
+  <p class="intro">Le gérant crée les identifiants de l'équipe. Les mots de passe ne sont jamais affichés.</p>
+</div>
 
 @if (message; as ok) {
-  <p class="succes" role="status">{{ ok }}</p>
+  <div class="np-alerte np-alerte--succes np-anime-slide" role="status">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <p class="succes">{{ ok }}</p>
+  </div>
 }
 
-<h2>Nouveau compte</h2>
-<form [formGroup]="formulaire" (ngSubmit)="creer()">
-  <np-form-field label="Identifiant" controlId="nouveau-identifiant">
-    <input id="nouveau-identifiant" type="text" formControlName="identifiant" autocomplete="off" />
-  </np-form-field>
-  <np-form-field label="Nom affiché" controlId="nouveau-nom">
-    <input id="nouveau-nom" type="text" formControlName="nom" />
-  </np-form-field>
-  <np-form-field label="Rôle" controlId="nouveau-role">
-    <select id="nouveau-role" formControlName="role">
-      <option value="RECEPTIONNISTE">Réceptionniste</option>
-      <option value="GERANT">Gérant</option>
-    </select>
-  </np-form-field>
-  <np-form-field label="Mot de passe" controlId="nouveau-mdp">
-    <input id="nouveau-mdp" type="password" formControlName="motDePasse" autocomplete="new-password" />
-  </np-form-field>
-  @if (erreur; as messageErreur) {
-    <p class="erreur" role="alert">{{ messageErreur }}</p>
-  }
-  <np-button variant="principal" type="submit">Créer le compte</np-button>
-</form>
+<div class="grille-personnel">
+  <np-card class="carte-creation">
+    <h2>Nouveau compte</h2>
+    <form [formGroup]="formulaire" (ngSubmit)="creer()">
+      <np-form-field label="Identifiant" controlId="nouveau-identifiant">
+        <input id="nouveau-identifiant" type="text" formControlName="identifiant" autocomplete="off" placeholder="Ex. aminata" />
+      </np-form-field>
 
-<h2>Comptes existants</h2>
-<np-table libelle="Liste des comptes du personnel">
-  <table>
-    <thead>
-      <tr>
-        <th scope="col">Identifiant</th>
-        <th scope="col">Nom</th>
-        <th scope="col">Rôle</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (compte of comptes; track compte.id) {
-        <tr>
-          <td>{{ compte.identifiant }}</td>
-          <td>{{ compte.nom }}</td>
-          <td>{{ labels[compte.role] }}</td>
-        </tr>
+      <np-form-field label="Nom affiché" controlId="nouveau-nom">
+        <input id="nouveau-nom" type="text" formControlName="nom" placeholder="Ex. Aminata Touré" />
+      </np-form-field>
+
+      <np-form-field label="Rôle" controlId="nouveau-role">
+        <select id="nouveau-role" formControlName="role">
+          <option value="RECEPTIONNISTE">Réceptionniste</option>
+          <option value="GERANT">Gérant</option>
+        </select>
+      </np-form-field>
+
+      <np-form-field label="Mot de passe" controlId="nouveau-mdp">
+        <input id="nouveau-mdp" type="password" formControlName="motDePasse" autocomplete="new-password" placeholder="Minimum 8 caractères" />
+      </np-form-field>
+
+      @if (erreur; as messageErreur) {
+        <div class="np-alerte np-alerte--erreur np-anime-fade" role="alert">
+          <p class="erreur">{{ messageErreur }}</p>
+        </div>
       }
-    </tbody>
-  </table>
-</np-table>
+
+      <div class="action-creer">
+        <np-button variant="principal" type="submit">Créer le compte</np-button>
+      </div>
+    </form>
+  </np-card>
+
+  <div class="zone-table">
+    <h2>Comptes existants</h2>
+    <np-table libelle="Liste des comptes du personnel">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Identifiant</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Rôle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (compte of comptes; track compte.id) {
+            <tr>
+              <td><span class="badge-identifiant">{{ compte.identifiant }}</span></td>
+              <td><strong>{{ compte.nom }}</strong></td>
+              <td>
+                <span class="badge-role" [class.badge-role--gerant]="compte.role === 'GERANT'">
+                  {{ labels[compte.role] }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </np-table>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NpButtonComponent } from '../../systeme-design/np-button/np-button.component';
+import { NpCardComponent } from '../../systeme-design/np-card/np-card.component';
 import { NpFormFieldComponent } from '../../systeme-design/np-form-field/np-form-field.component';
 import { NpTableComponent } from '../../systeme-design/np-table/np-table.component';
 import { ROLE_LABELS, RoleUtilisateur, SessionUtilisateur } from '../models/utilisateur.model';
@@ -8,7 +9,13 @@ import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-personnel',
-  imports: [ReactiveFormsModule, NpButtonComponent, NpFormFieldComponent, NpTableComponent],
+  imports: [
+    ReactiveFormsModule,
+    NpButtonComponent,
+    NpCardComponent,
+    NpFormFieldComponent,
+    NpTableComponent,
+  ],
   templateUrl: './personnel.component.html',
   styleUrl: './personnel.component.css',
 })

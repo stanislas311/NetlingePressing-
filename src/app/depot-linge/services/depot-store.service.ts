@@ -232,6 +232,42 @@ export class DepotStoreService {
     return misAJour;
   }
 
+  archiverDepot(depotId: string): Depot | null {
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return null;
+    }
+    const misAJour: Depot = { ...depots[index], archive: true };
+    depots[index] = misAJour;
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    return misAJour;
+  }
+
+  desarchiverDepot(depotId: string): Depot | null {
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return null;
+    }
+    const misAJour: Depot = { ...depots[index] };
+    delete misAJour.archive;
+    depots[index] = misAJour;
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    return misAJour;
+  }
+
+  supprimerDepot(depotId: string): boolean {
+    const depots = this.listerDepots();
+    const index = depots.findIndex((d) => d.id === depotId);
+    if (index === -1) {
+      return false;
+    }
+    depots.splice(index, 1);
+    this.ecrire(CLE_DEPOTS, JSON.stringify(depots));
+    return true;
+  }
+
   private normaliserDepot(depot: Depot): Depot {
     const statutValide: DepotStatut[] = [...STATUTS_ORDE, 'annule'];
     const statut =
@@ -240,13 +276,19 @@ export class DepotStoreService {
       Array.isArray(depot.historiqueStatuts) && depot.historiqueStatuts.length > 0
         ? depot.historiqueStatuts
         : [{ ancien: null, nouveau: statut, date: depot.dateDepot }];
-    return {
+    const normalise: Depot = {
       ...depot,
       statut,
       historiqueStatuts: historique,
       montantTotal: depot.montantTotal ?? 0,
       paiements: Array.isArray(depot.paiements) ? depot.paiements : [],
     };
+    if (depot.archive) {
+      normalise.archive = true;
+    } else {
+      delete normalise.archive;
+    }
+    return normalise;
   }
 
   private enregistrerClient(nom: string, telephone: string): Client {

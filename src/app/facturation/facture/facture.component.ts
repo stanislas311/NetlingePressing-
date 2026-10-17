@@ -53,6 +53,10 @@ export class FactureComponent {
     return formaterMontant(soldeRestant(d));
   }
 
+  estSolde(d: Depot): boolean {
+    return soldeRestant(d) === 0;
+  }
+
   imprimer(): void {
     window.print();
   }

@@ -1,12 +1,45 @@
 @if (depot; as d) {
-  <np-card class="ticket facture">
+  <div class="facture-page-entete">
+    <a [routerLink]="['/depots', d.id, 'ticket']" class="retour-lien">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Retour au ticket
+    </a>
+    <np-button variant="principal" (click)="imprimer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect width="12" height="8" x="6" y="14"></rect>
+      </svg>
+      Imprimer la facture
+    </np-button>
+  </div>
+
+  <np-card class="ticket facture np-anime-fade">
     <header class="entete">
-      <h1>Facture</h1>
-      <p class="numero">{{ d.ticketNumero }}</p>
-      <p>Netlinge Pressing — Cocody, Abidjan</p>
+      <div class="marque-pressing">
+        <span class="eyebrow">Service de blanchisserie & pressing</span>
+        <h1>Facture</h1>
+        <p class="numero">{{ d.ticketNumero }}</p>
+        <p class="pressing-coordonnees">Netlinge Pressing — Cocody, Abidjan · Tél: +225 07 00 00 00 00</p>
+      </div>
+
+      <!-- Tampon d'état de paiement -->
+      <div class="tampon-solde" [class.tampon-solde--acquittee]="estSolde(d)" [class.tampon-solde--attente]="!estSolde(d)">
+        @if (estSolde(d)) {
+          <span>FACTURE ACQUITTÉE</span>
+        } @else {
+          <span>SOLDE RESTANT DÛ</span>
+        }
+      </div>
     </header>
-    <p><strong>Client :</strong> {{ d.clientNom }} ({{ d.clientTelephone }})</p>
-    <p><strong>Date de dépôt :</strong> {{ formater(d.dateDepot) }}</p>
+
+    <div class="client-bloc">
+      <p><strong>Client :</strong> {{ d.clientNom }} ({{ d.clientTelephone }})</p>
+      <p><strong>Date de dépôt :</strong> {{ formater(d.dateDepot) }}</p>
+    </div>
 
     <h2>Détail</h2>
     <np-table libelle="Lignes de facture">
@@ -22,7 +55,7 @@
         <tbody>
           @for (article of d.articles; track $index) {
             <tr>
-              <td>{{ article.type }}</td>
+              <td><strong>{{ article.type }}</strong></td>
               <td>{{ article.service }}</td>
               <td>{{ article.quantite }}</td>
               <td>{{ ligne(article.type, article.service, article.quantite) }}</td>
@@ -32,26 +65,61 @@
       </table>
     </np-table>
 
-    <p><strong>Total :</strong> {{ total(d) }}</p>
-    <p><strong>Payé :</strong> {{ paye(d) }}</p>
-    <p><strong>Solde :</strong> {{ solde(d) }}</p>
+    <!-- Bloc totalisations récapitulatif -->
+    <div class="recapitulatif-facture">
+      <div class="ligne-recap">
+        <span class="libelle"><strong>Total :</strong></span>
+        <span class="valeur valeur-total">{{ total(d) }}</span>
+      </div>
+      <div class="ligne-recap">
+        <span class="libelle"><strong>Payé :</strong></span>
+        <span class="valeur valeur-paye">{{ paye(d) }}</span>
+      </div>
+      <div class="ligne-recap ligne-recap--solde">
+        <span class="libelle"><strong>Solde :</strong></span>
+        <span class="valeur" [class.valeur-solde-zero]="estSolde(d)" [class.valeur-solde-du]="!estSolde(d)">
+          {{ solde(d) }}
+        </span>
+      </div>
+    </div>
 
     <h2>Paiements</h2>
     @if ((d.paiements ?? []).length === 0) {
-      <p>Aucun paiement.</p>
+      <p class="texte-vide">Aucun paiement.</p>
     } @else {
-      <ul>
+      <ul class="liste-paiements">
         @for (p of d.paiements; track $index) {
-          <li>{{ formater(p.date) }} — {{ p.libelle }} : {{ montant(p.montant) }}</li>
+          <li>
+            <span class="date">{{ formater(p.date) }}</span> —
+            <span class="libelle">{{ p.libelle }}</span> :
+            <strong class="montant">{{ montant(p.montant) }}</strong>
+          </li>
         }
       </ul>
     }
+
+    <!-- Signature & mention légale pour impression -->
+    <div class="zone-signatures">
+      <div class="signature-box">
+        <span>Signature du client</span>
+      </div>
+      <div class="signature-box">
+        <span>Cachet & Signature Netlinge</span>
+      </div>
+    </div>
+
+    <footer class="pied-facture">
+      <p>Merci pour votre confiance. Netlinge Pressing vous garantit un soin irréprochable de vos textiles.</p>
+    </footer>
   </np-card>
+
   <div class="actions">
     <np-button variant="principal" (click)="imprimer()">Imprimer la facture</np-button>
     <a [routerLink]="['/depots', d.id, 'ticket']">Retour au ticket</a>
   </div>
 } @else {
-  <p role="alert">Facture introuvable.</p>
-  <a routerLink="/depots">Retour à la liste</a>
+  <div class="introuvable-conteneur np-anime-fade">
+    <p role="alert" class="introuvable">Facture introuvable.</p>
+    <a routerLink="/depots" class="np-bouton np-bouton--principal">Retour à la liste</a>
+  </div>
 }

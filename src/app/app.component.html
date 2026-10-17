@@ -1,72 +1,137 @@
 <div class="np-coquille" [class.np-coquille--publique]="!afficherNavigation">
   <header class="np-entete-application">
-    @if (afficherNavigation) {
-      <button
-        type="button"
-        class="np-menu-bascule"
-        (click)="basculerMenu()"
-        [attr.aria-expanded]="menuOuvert"
-        aria-controls="np-navigation"
-        aria-label="Menu de navigation"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-          focusable="false"
+    <div class="np-entete-gauche">
+      @if (afficherNavigation) {
+        <button
+          type="button"
+          class="np-menu-bascule"
+          (click)="basculerMenu()"
+          [attr.aria-expanded]="menuOuvert"
+          aria-controls="np-navigation"
+          aria-label="Menu de navigation"
         >
-          <line x1="4" y1="6" x2="20" y2="6"></line>
-          <line x1="4" y1="12" x2="20" y2="12"></line>
-          <line x1="4" y1="18" x2="20" y2="18"></line>
-        </svg>
-      </button>
-    }
-    <a routerLink="/" class="np-marque" (click)="fermerMenu()">{{ title }}</a>
-    @if (auth.utilisateurCourant(); as utilisateur) {
-      <div class="np-utilisateur">
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span class="np-utilisateur__texte">{{ utilisateur.nom }} · {{ libelleRole() }}</span>
-        <button type="button" class="np-deconnexion" (click)="deconnecter()">
-          Déconnexion
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
         </button>
-      </div>
-    } @else {
-      <a routerLink="/connexion" class="np-lien-connexion">Connexion</a>
-    }
+      }
+      <a routerLink="/" class="np-marque" (click)="fermerMenu()">
+        <span class="np-marque__icone" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+          </svg>
+        </span>
+        <span class="np-marque__titre">{{ title }}</span>
+      </a>
+    </div>
+
+    <div class="np-entete-droite">
+      @if (auth.utilisateurCourant(); as utilisateur) {
+        <div class="np-utilisateur">
+          <div class="np-avatar" aria-hidden="true">
+            {{ utilisateur.nom.charAt(0) }}
+          </div>
+          <svg
+            class="np-utilisateur__icone"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="np-utilisateur__texte">{{ utilisateur.nom }} · {{ libelleRole() }}</span>
+          <button type="button" class="np-deconnexion" (click)="deconnecter()" title="Se déconnecter">
+            Déconnexion
+          </button>
+        </div>
+      } @else {
+        <a routerLink="/connexion" class="np-lien-connexion">Connexion</a>
+      }
+    </div>
   </header>
 
   @if (afficherNavigation) {
+    @if (menuOuvert) {
+      <div class="np-nav-rideau" (click)="fermerMenu()" aria-hidden="true"></div>
+    }
     <nav
       id="np-navigation"
       class="np-nav"
       [class.np-nav--ouverte]="menuOuvert"
       aria-label="Navigation principale"
     >
-      <a routerLink="/tableau-de-bord" (click)="fermerMenu()">Tableau de bord</a>
-      <a routerLink="/depots" (click)="fermerMenu()">Dépôts de linge</a>
-      <a routerLink="/notifications" (click)="fermerMenu()">Notifications</a>
+      <div class="np-nav__section">
+        <span class="np-nav__etiquette">Gestion Pressing</span>
+        <a routerLink="/tableau-de-bord" routerLinkActive="actif" (click)="fermerMenu()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+            <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+            <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+            <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+          </svg>
+          <span>Tableau de bord</span>
+        </a>
+        <a routerLink="/depots" routerLinkActive="actif" (click)="fermerMenu()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 16h6"></path>
+            <path d="M19 13v6"></path>
+            <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"></path>
+            <path d="m7.5 4.27 9 5.15"></path>
+            <polyline points="3.29 7 12 12 20.71 7"></polyline>
+            <line x1="12" x2="12" y1="22" y2="12"></line>
+          </svg>
+          <span>Dépôts de linge</span>
+        </a>
+        <a routerLink="/notifications" routerLinkActive="actif" (click)="fermerMenu()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+          </svg>
+          <span>Notifications</span>
+        </a>
+      </div>
+
       @if (auth.estGerant()) {
-        <a routerLink="/tarifs" (click)="fermerMenu()">Tarifs</a>
-        <a routerLink="/personnel" (click)="fermerMenu()">Personnel</a>
+        <div class="np-nav__section">
+          <span class="np-nav__etiquette">Administration</span>
+          <a routerLink="/tarifs" routerLinkActive="actif" (click)="fermerMenu()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"></path>
+              <path d="M7 7h.01"></path>
+            </svg>
+            <span>Tarifs</span>
+          </a>
+          <a routerLink="/personnel" routerLinkActive="actif" (click)="fermerMenu()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Personnel</span>
+          </a>
+        </div>
       }
     </nav>
   }

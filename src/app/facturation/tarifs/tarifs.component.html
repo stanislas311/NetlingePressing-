@@ -1,23 +1,42 @@
-<h1>Catalogue des tarifs</h1>
-<p>Le gérant fixe le prix de chaque couple article / service (francs CFA).</p>
+<div class="tarifs-entete">
+  <h2>Catalogue des tarifs</h2>
+  <p class="sous-titre">Le gérant fixe le prix de chaque couple article / service (en francs CFA).</p>
+</div>
+
 @if (message; as ok) {
-  <p class="succes" role="status">{{ ok }}</p>
-}
-<form [formGroup]="form" (ngSubmit)="enregistrer()">
-  <div formArrayName="lignes">
-  @for (ligne of lignes.controls; track $index; let i = $index) {
-    <div class="ligne" [formGroupName]="i">
-      <np-form-field label="Article" [controlId]="'tarif-type-' + i">
-        <input [id]="'tarif-type-' + i" type="text" formControlName="type" />
-      </np-form-field>
-      <np-form-field label="Service" [controlId]="'tarif-service-' + i">
-        <input [id]="'tarif-service-' + i" type="text" formControlName="service" />
-      </np-form-field>
-      <np-form-field label="Prix" [controlId]="'tarif-prix-' + i">
-        <input [id]="'tarif-prix-' + i" type="number" min="0" step="50" formControlName="prix" />
-      </np-form-field>
-    </div>
-  }
+  <div class="np-alerte np-alerte--succes np-anime-slide" role="status">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <p class="succes">{{ ok }}</p>
   </div>
-  <np-button type="submit" variant="principal">Enregistrer les tarifs</np-button>
+}
+
+<form [formGroup]="form" (ngSubmit)="enregistrer()" class="tarifs-formulaire">
+  <div class="tarifs-grille" formArrayName="lignes">
+    @for (ligne of lignes.controls; track $index; let i = $index) {
+      <div class="ligne-carte np-anime-fade" [formGroupName]="i">
+        <div class="champ-article">
+          <np-form-field label="Article" [controlId]="'tarif-type-' + i">
+            <input [id]="'tarif-type-' + i" type="text" formControlName="type" />
+          </np-form-field>
+        </div>
+        <div class="champ-service">
+          <np-form-field label="Service" [controlId]="'tarif-service-' + i">
+            <input [id]="'tarif-service-' + i" type="text" formControlName="service" />
+          </np-form-field>
+        </div>
+        <div class="champ-prix">
+          <np-form-field label="Prix (F CFA)" [controlId]="'tarif-prix-' + i">
+            <input [id]="'tarif-prix-' + i" type="number" min="0" step="50" formControlName="prix" />
+          </np-form-field>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="actions">
+    <np-button type="submit" variant="principal">Enregistrer les tarifs</np-button>
+  </div>
 </form>

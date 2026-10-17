@@ -1,52 +1,100 @@
 :host {
   display: block;
-  max-width: 720px;
+  max-width: 960px;
 }
 
-h1 {
-  margin: 0 0 0.35rem;
+.personnel-entete {
+  margin-bottom: 1.5rem;
+}
+
+.personnel-entete h2 {
+  font-size: 1.6rem;
+  margin: 0;
+  color: var(--np-texte);
 }
 
 .intro {
   color: var(--np-texte-doux);
-  margin: 0 0 1.5rem;
+  margin: 0.25rem 0 0;
+  font-size: 0.925rem;
 }
 
-h2 {
-  margin: 1.5rem 0 0.75rem;
-  font-size: 1.1rem;
+.np-alerte {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--np-rayon);
+  margin-bottom: 1.5rem;
 }
 
-.succes {
-  color: var(--np-succes);
+.np-alerte--succes {
   background: var(--np-succes-fond);
-  padding: 0.6rem 0.8rem;
-  border-radius: var(--np-rayon-petit);
+  color: var(--np-succes-texte);
+  border: 1px solid rgba(22, 163, 74, 0.25);
 }
 
-.erreur {
+.np-alerte--erreur {
+  background: var(--np-erreur-fond);
   color: var(--np-erreur);
-  margin: 0 0 0.75rem;
+  border: 1px solid rgba(211, 47, 47, 0.25);
 }
 
-select {
+.succes,
+.erreur {
+  margin: 0;
+  font-weight: 600;
+}
+
+.grille-personnel {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .grille-personnel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.carte-creation h2,
+.zone-table h2 {
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+  color: var(--np-texte);
+}
+
+.action-creer {
+  margin-top: 1rem;
+}
+
+.action-creer np-button ::ng-deep button {
   width: 100%;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid var(--np-bordure);
-  border-radius: var(--np-rayon-petit);
-  font-family: var(--np-police-texte);
-  font-size: 1rem;
-  background: var(--np-surface);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.badge-identifiant {
+  font-family: var(--np-police-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: #f1f5f9;
+  color: #334155;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--np-rayon-xs);
 }
 
-th,
-td {
-  border: 1px solid var(--np-bordure);
-  padding: 0.5rem 0.65rem;
-  text-align: left;
+.badge-role {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--np-rayon-pill);
+  background: var(--np-couleur-principale-clair);
+  color: var(--np-couleur-principale-fonce);
+}
+
+.badge-role--gerant {
+  background: #fef3c7;
+  color: #92400e;
 }

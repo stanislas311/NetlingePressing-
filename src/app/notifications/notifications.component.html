@@ -1,15 +1,45 @@
-<h1>Notifications</h1>
+<div class="notifications-entete">
+  <h2>Notifications</h2>
+  <p class="sous-titre">Historique des alertes atelier : dépôts créés, linges prêts et retards.</p>
+</div>
+
 @if (liste.length === 0) {
-  <p class="vide">Aucune notification pour le moment.</p>
+  <div class="vide-conteneur np-anime-fade">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="icone-vide" aria-hidden="true">
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+    </svg>
+    <p class="vide">Aucune notification pour le moment.</p>
+  </div>
 } @else {
   <ul class="liste">
     @for (item of liste; track item.id) {
-      <li>
-        <p class="titre">{{ item.titre }}</p>
-        <p>{{ item.message }}</p>
-        <p class="date">{{ formater(item.date) }}</p>
+      <li class="notification-item np-anime-fade" [class.notification-item--pret]="item.type === 'pret'" [class.notification-item--retard]="item.type === 'retard'">
+        <div class="notif-gauche">
+          <span class="notif-icone" aria-hidden="true">
+            @if (item.type === 'pret') {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            } @else if (item.type === 'retard') {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            } @else {
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16h6"></path><path d="M19 13v6"></path><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"></path></svg>
+            }
+          </span>
+          <div class="notif-contenu">
+            <p class="titre">{{ item.titre }}</p>
+            <p class="message">{{ item.message }}</p>
+            <p class="date">{{ formater(item.date) }}</p>
+          </div>
+        </div>
+
         @if (item.depotId) {
-          <a [routerLink]="['/depots', item.depotId, 'ticket']">Ouvrir le ticket</a>
+          <a [routerLink]="['/depots', item.depotId, 'ticket']" class="lien-ouvrir">
+            Ouvrir le ticket
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
         }
       </li>
     }

@@ -51,6 +51,7 @@ export interface Depot {
   montantTotal?: number;
   paiements?: Paiement[];
   motifAnnulation?: string;
+  archive?: boolean;
 }
 
 export interface DepotCreation {
@@ -67,6 +68,10 @@ export function totalPaye(depot: Pick<Depot, 'paiements'>): number {
 
 export function soldeRestant(depot: Pick<Depot, 'montantTotal' | 'paiements'>): number {
   return Math.max(0, (depot.montantTotal ?? 0) - totalPaye(depot));
+}
+
+export function estSolde(depot: Pick<Depot, 'montantTotal' | 'paiements'>): boolean {
+  return soldeRestant(depot) === 0;
 }
 
 export function formaterMontant(montant: number): string {

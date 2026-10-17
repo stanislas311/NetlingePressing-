@@ -142,6 +142,30 @@ export class DepotCreateComponent {
     return null;
   }
 
+  totalEstimeValeur(): number {
+    return this.articlesValides.reduce((somme, g) => {
+      const qte = Number(g.value.quantite) || 0;
+      return somme + this.tarifs.prix(String(g.value.type), String(g.value.service)) * qte;
+    }, 0);
+  }
+
+  apercuTotal(): string {
+    return formaterMontant(this.totalEstimeValeur());
+  }
+
+  apercuSolde(): string {
+    const total = this.totalEstimeValeur();
+    const avance = Number(this.form.get('avance')?.value) || 0;
+    const solde = Math.max(0, total - avance);
+    return formaterMontant(solde);
+  }
+
+  definirAvancePourcentage(pct: number): void {
+    const total = this.totalEstimeValeur();
+    const montant = Math.round((total * pct) / 100);
+    this.form.get('avance')?.setValue(montant);
+  }
+
   onSubmit(): void {
     this.soumis = true;
     const clientValide = this.form.get('client')!.valid;
@@ -167,14 +191,6 @@ export class DepotCreateComponent {
     });
     this.messageConfirmation = `Dépôt enregistré avec le ticket ${depot.ticketNumero}.`;
     this.router.navigate(['/depots', depot.id, 'ticket']);
-  }
-
-  apercuTotal(): string {
-    const total = this.articlesValides.reduce((somme, g) => {
-      const qte = Number(g.value.quantite) || 0;
-      return somme + this.tarifs.prix(String(g.value.type), String(g.value.service)) * qte;
-    }, 0);
-    return formaterMontant(total);
   }
 
   private creerArticle(): FormGroup {

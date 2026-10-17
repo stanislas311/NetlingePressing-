@@ -151,7 +151,7 @@ describe('DepotListComponent', () => {
       expect(component.erreurEdition).toBeNull();
       const enregistre = store.getDepotById(depot.id)!;
       expect(jourLocal(new Date(enregistre.dateRetraitPrevue))).toBe(attendu);
-      expect(component.depots[0].dateRetraitPrevue).toBe(
+      expect(component.depots.find((d) => d.id === depot.id)?.dateRetraitPrevue).toBe(
         enregistre.dateRetraitPrevue
       );
     });
@@ -249,6 +249,36 @@ describe('DepotListComponent', () => {
         (fixture.nativeElement as HTMLElement).querySelectorAll('button')
       ).filter((b) => (b.textContent ?? '').includes('Modifier la date de retrait'));
       expect(boutonsModif.length).toBe(0);
+    });
+  });
+
+  describe('archivage et suppression', () => {
+    it('archive un dépôt et le retire de la liste active', () => {
+      const premier = store.listerDepots()[0];
+      component.archiverDepot(premier);
+      fixture.detectChanges();
+
+      expect(component.nombreArchives).toBe(1);
+      expect(component.depots.some((d) => d.id === premier.id)).toBeFalse();
+
+      component.basculerVueArchives();
+      fixture.detectChanges();
+      expect(component.depots.length).toBe(1);
+      expect(component.depots[0].id).toBe(premier.id);
+
+      component.desarchiverDepot(premier);
+      fixture.detectChanges();
+      expect(component.nombreArchives).toBe(0);
+    });
+
+    it('supprime un dépôt après confirmation', () => {
+      spyOn(window, 'confirm').and.returnValue(true);
+      const premier = store.listerDepots()[0];
+      component.supprimerDepot(premier);
+      fixture.detectChanges();
+
+      expect(store.getDepotById(premier.id)).toBeUndefined();
+      expect(component.depots.some((d) => d.id === premier.id)).toBeFalse();
     });
   });
 });

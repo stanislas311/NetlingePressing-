@@ -1,59 +1,154 @@
-<h1>Tableau de bord</h1>
+<div class="tableau-entete">
+  <div>
+    <h1>Tableau de bord</h1>
+    <p class="sous-titre">Vue d'ensemble de l'activité, des dépôts en cours et de la trésorerie du jour.</p>
+  </div>
+  <a routerLink="/depots/nouveau" class="np-bouton np-bouton--principal">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    Nouveau dépôt
+  </a>
+</div>
+
+<!-- Grille des indicateurs KPI -->
 <div class="grille">
-  <np-card>
-    <h2>Dépôts du jour</h2>
+  <np-card class="carte-kpi carte-kpi--depots">
+    <div class="kpi-entete">
+      <span class="kpi-icone" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 16h6"></path>
+          <path d="M19 13v6"></path>
+          <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"></path>
+        </svg>
+      </span>
+      <h2>Dépôts du jour</h2>
+    </div>
     <p class="chiffre">{{ depotsDuJour.length }}</p>
+    <span class="kpi-legende">Enregistrés aujourd'hui</span>
   </np-card>
-  <np-card>
-    <h2>Prêts à retirer</h2>
+
+  <np-card class="carte-kpi carte-kpi--prets">
+    <div class="kpi-entete">
+      <span class="kpi-icone" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </span>
+      <h2>Prêts à retirer</h2>
+    </div>
     <p class="chiffre">{{ prets.length }}</p>
+    <span class="kpi-legende">En attente des clients</span>
   </np-card>
-  <np-card>
-    <h2>En retard</h2>
+
+  <np-card class="carte-kpi carte-kpi--retards">
+    <div class="kpi-entete">
+      <span class="kpi-icone" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </span>
+      <h2>En retard</h2>
+    </div>
     <p class="chiffre">{{ retards.length }}</p>
+    <span class="kpi-legende">Dépassement de date prévue</span>
   </np-card>
+
   @if (auth.estGerant()) {
-    <np-card>
-      <h2>Chiffre d'affaires du jour</h2>
+    <np-card class="carte-kpi carte-kpi--ca">
+      <div class="kpi-entete">
+        <span class="kpi-icone" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </span>
+        <h2>Chiffre d'affaires du jour</h2>
+      </div>
       <p class="chiffre">{{ chiffreAffairesJour }}</p>
+      <span class="kpi-legende">Encaissements aujourd'hui</span>
     </np-card>
   }
 </div>
 
-<h2>Répartition par statut</h2>
-<ul class="repartition">
-  @for (item of repartition(); track item.statut) {
-    <li>
-      <np-status-badge [statut]="item.statut" [libelle]="item.libelle" />
-      <span>{{ item.nombre }}</span>
-    </li>
-  }
-</ul>
-
-<h2>Linge prêt</h2>
-@if (prets.length === 0) {
-  <p class="vide">Aucun dépôt prêt pour le moment.</p>
-} @else {
-  <ul>
-    @for (depot of prets; track depot.id) {
-      <li>
-        <a [routerLink]="['/depots', depot.id, 'ticket']">{{ depot.ticketNumero }}</a>
-        — {{ depot.clientNom }}
+<!-- Répartition par statut -->
+<div class="section-repartition">
+  <h2>Répartition par statut</h2>
+  <ul class="repartition">
+    @for (item of repartition(); track item.statut) {
+      <li class="repartition-item">
+        <np-status-badge [statut]="item.statut" [libelle]="item.libelle" />
+        <span class="repartition-compte">{{ item.nombre }}</span>
       </li>
     }
   </ul>
-}
+</div>
 
-<h2>Retards</h2>
-@if (retards.length === 0) {
-  <p class="vide">Aucun retard.</p>
-} @else {
-  <ul>
-    @for (depot of retards; track depot.id) {
-      <li>
-        <a [routerLink]="['/depots', depot.id, 'ticket']">{{ depot.ticketNumero }}</a>
-        — {{ depot.clientNom }}
-      </li>
+<!-- Grille des listes d'action : Linge prêt & Retards -->
+<div class="grille-listes">
+  <div class="panneau-liste">
+    <div class="panneau-liste__entete">
+      <div class="panneau-liste__titre-groupe">
+        <span class="pastille-point pastille-point--vert"></span>
+        <h2>Linge prêt</h2>
+      </div>
+      <span class="badge-total">{{ prets.length }}</span>
+    </div>
+
+    @if (prets.length === 0) {
+      <p class="vide">Aucun dépôt prêt pour le moment.</p>
+    } @else {
+      <ul class="liste-depots-dashboard">
+        @for (depot of prets; track depot.id) {
+          <li class="depot-item np-anime-fade">
+            <div class="depot-item__info">
+              <a [routerLink]="['/depots', depot.id, 'ticket']" class="lien-ticket">
+                {{ depot.ticketNumero }}
+              </a>
+              <span class="depot-item__client">{{ depot.clientNom }}</span>
+            </div>
+            <div class="depot-item__actions">
+              <a [routerLink]="['/depots', depot.id, 'ticket']" class="btn-action-rapide">
+                Voir
+              </a>
+            </div>
+          </li>
+        }
+      </ul>
     }
-  </ul>
-}
+  </div>
+
+  <div class="panneau-liste">
+    <div class="panneau-liste__entete">
+      <div class="panneau-liste__titre-groupe">
+        <span class="pastille-point pastille-point--rouge"></span>
+        <h2>Retards</h2>
+      </div>
+      <span class="badge-total badge-total--rouge">{{ retards.length }}</span>
+    </div>
+
+    @if (retards.length === 0) {
+      <p class="vide">Aucun retard.</p>
+    } @else {
+      <ul class="liste-depots-dashboard">
+        @for (depot of retards; track depot.id) {
+          <li class="depot-item depot-item--retard np-anime-fade">
+            <div class="depot-item__info">
+              <a [routerLink]="['/depots', depot.id, 'ticket']" class="lien-ticket">
+                {{ depot.ticketNumero }}
+              </a>
+              <span class="depot-item__client">{{ depot.clientNom }}</span>
+            </div>
+            <div class="depot-item__actions">
+              <a [routerLink]="['/depots', depot.id, 'ticket']" class="btn-action-rapide">
+                Relancer
+              </a>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

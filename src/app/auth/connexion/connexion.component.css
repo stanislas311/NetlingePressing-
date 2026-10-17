@@ -1,26 +1,136 @@
 :host {
   display: block;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.connexion-enveloppe {
+  width: 100%;
+  max-width: 440px;
 }
 
 .connexion {
-  max-width: 420px;
-  margin: 2rem auto;
+  border-radius: var(--np-rayon-grand);
+  padding: 2.25rem;
+  box-shadow: var(--np-ombre-lg);
+  border: 1px solid var(--np-bordure);
+}
+
+.connexion-marque {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.connexion-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--np-rayon);
+  background: var(--np-couleur-principale-clair);
+  color: var(--np-couleur-principale-fonce);
+  margin-bottom: 0.85rem;
 }
 
 h1 {
   margin: 0 0 0.35rem;
+  font-size: 1.6rem;
 }
 
 .intro {
   color: var(--np-texte-doux);
-  margin: 0 0 1.25rem;
+  margin: 0;
+  font-size: 0.925rem;
+}
+
+.demo-comptes {
+  background: #f8fafc;
+  border: 1px dashed var(--np-bordure-forte);
+  border-radius: var(--np-rayon);
+  padding: 0.85rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.demo-titre {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--np-texte-doux);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.demo-boutons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.btn-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffffff;
+  border: 1px solid var(--np-bordure-forte);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--np-rayon-petit);
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--np-couleur-principale-fonce);
+  cursor: pointer;
+  transition: all var(--np-transition-rapide);
+}
+
+.btn-demo:hover {
+  background: var(--np-couleur-principale-clair);
+  border-color: var(--np-couleur-principale);
+}
+
+.np-alerte-erreur {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--np-erreur-fond);
+  border: 1px solid rgba(211, 47, 47, 0.25);
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--np-rayon-petit);
+  margin-bottom: 1rem;
 }
 
 .erreur {
   color: var(--np-erreur);
-  margin: 0 0 0.75rem;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.action-connexion {
+  margin-top: 1.25rem;
+}
+
+.action-connexion np-button ::ng-deep button {
+  width: 100%;
 }
 
 .retour {
-  margin: 1.25rem 0 0;
+  text-align: center;
+  margin: 1.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.retour a {
+  color: var(--np-texte-doux);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.retour a:hover {
+  color: var(--np-couleur-principale);
+  text-decoration: underline;
 }
